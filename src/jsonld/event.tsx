@@ -17,7 +17,7 @@ type Location = {
 type Performer = {
   name: string;
 };
-
+//Updated event for multiple instance and props
 export interface EventJsonLdProps {
   keyOverride: string;
   name: string;
