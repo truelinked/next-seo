@@ -69,7 +69,7 @@ const EventJsonLd: FC<EventJsonLdProps> = ({
 }) => {
   const jslonld = `{
     "@context": "https://schema.org",
-    "@type": "${eventType ? eventType : 'Event'}",
+    ${eventType ? `"@type": "${eventType},"` : 'Event'}
     ${eventStatus ? `"eventStatus":"${eventStatus}",` : ``}
     ${
       eventAttendanceMode
