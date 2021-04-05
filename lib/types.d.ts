@@ -17,6 +17,17 @@ export interface Address {
   postalCode: string;
   addressCountry: string;
 }
+export interface Composer {
+  type: string;
+  name: string;
+  sameAs?: string;
+}
+export interface Organizer {
+  type: string;
+  name: string;
+  url?: string;
+  sameAs?: string;
+}
 export interface Video {
   name: string;
   description: string;

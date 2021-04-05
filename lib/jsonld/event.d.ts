@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Address, AggregateOffer, Offers } from '../types';
+import { Address, AggregateOffer, Offers, Composer, Organizer } from '../types';
 declare type Location = {
   name: string;
   address: Address;
@@ -23,6 +23,8 @@ export interface EventJsonLdProps {
   offers?: Offers | Offers[];
   aggregateOffer?: AggregateOffer;
   performers?: Performer | Performer[];
+  composers?: Composer | Composer[];
+  organizers?: Organizer | Organizer[];
 }
 declare const EventJsonLd: FC<EventJsonLdProps>;
 export default EventJsonLd;

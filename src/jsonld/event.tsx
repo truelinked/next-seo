@@ -4,7 +4,7 @@ import Head from 'next/head';
 import markup from '../utils/markup';
 import formatIfArray from '../utils/formatIfArray';
 import buildAddress from '../utils/buildAddress';
-import { Address, AggregateOffer, Offers } from '../types';
+import { Address, AggregateOffer, Offers, Composer, Organizer } from '../types';
 import { buildOffers } from '../utils/buildOffers';
 import { buildAggregateOffer } from '../utils/buildAggregateOffer';
 
@@ -33,6 +33,8 @@ export interface EventJsonLdProps {
   offers?: Offers | Offers[];
   aggregateOffer?: AggregateOffer;
   performers?: Performer | Performer[];
+  composers?: Composer | Composer[];
+  organizers?: Organizer | Organizer[];
 }
 
 const buildLocation = (location: Location) => `
@@ -51,6 +53,20 @@ const buildPerformer = (performer: Performer) => `
   }
 `;
 
+const buildComposer = (composer: Composer) => `
+  {
+    "@type": "Person",
+    "name": "${composer.name}"
+  }
+`;
+
+const buildOrganization = (organizer: Organizer) => `
+  {
+    "@type": "Organization",
+    "name": "${organizer.name}"
+  }
+`;
+
 const EventJsonLd: FC<EventJsonLdProps> = ({
   keyOverride,
   name,
@@ -66,6 +82,8 @@ const EventJsonLd: FC<EventJsonLdProps> = ({
   eventType,
   eventStatus,
   eventAttendanceMode,
+  composers,
+  organizers,
 }) => {
   const jslonld = `{
     "@context": "https://schema.org",
@@ -98,6 +116,26 @@ const EventJsonLd: FC<EventJsonLdProps> = ({
         : ''
     }
     ${
+      composers
+        ? `"composer": ${
+            Array.isArray(composers)
+              ? `[${composers.map(composer => `${buildComposer(composer)}`)}]`
+              : buildComposer(composers)
+          },`
+        : ''
+    }
+    ${
+      organizers
+        ? `"organizer": ${
+            Array.isArray(organizers)
+              ? `[${organizers.map(
+                  organizer => `${buildOrganization(organizer)}`,
+                )}]`
+              : buildOrganization(organizers)
+          },`
+        : ''
+    }
+    ${
       performers
         ? `"performer": ${
             Array.isArray(performers)
@@ -115,7 +153,7 @@ const EventJsonLd: FC<EventJsonLdProps> = ({
     <Head>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={markup(jslonld)}
+        dangerouslySetInnerHTML={markup(jslonld.replace(/(^[ \t]*\n)/gm, ''))}
         key={`jsonld-video${keyOverride ? `-${keyOverride}` : ''}`}
       />
     </Head>
