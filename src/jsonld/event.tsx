@@ -48,7 +48,7 @@ const buildLocation = (location: Location) => `
 
 const buildPerformer = (performer: Performer) => `
   {
-    "@type": "PerformingGroup",
+    "@type": "Person",
     "name": "${performer.name}"
   }
 `;
@@ -63,7 +63,8 @@ const buildComposer = (composer: Composer) => `
 const buildOrganization = (organizer: Organizer) => `
   {
     "@type": "Organization",
-    "name": "${organizer.name}"
+    "name": "${organizer.name}",
+    ${organizer.url ? `"url": "${organizer.url}",` : ``}
   }
 `;
 
