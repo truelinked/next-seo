@@ -96,7 +96,7 @@ const EventJsonLd: FC<EventJsonLdProps> = ({
     }
     "startDate": "${startDate}",
     "endDate": "${endDate}",
-    ${location ? `"location":"${location}",` : ``}
+    ${location ? `"location":"${{ ...location }}",` : ``}
     ${images ? `"image":${formatIfArray(images)},` : ``}
     ${url ? `"url": "${url}",` : ``}
     ${description ? `"description": "${description}",` : ``}
