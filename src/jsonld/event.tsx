@@ -3,14 +3,17 @@ import Head from 'next/head';
 
 import markup from '../utils/markup';
 import formatIfArray from '../utils/formatIfArray';
+import buildAddress from '../utils/buildAddress';
 import { Address, AggregateOffer, Offers, Composer, Organizer } from '../types';
 import { buildOffers } from '../utils/buildOffers';
 import { buildAggregateOffer } from '../utils/buildAggregateOffer';
 
 type Location = {
-  name: string;
-  address: Address;
+  type: string;
+  name?: string;
+  address?: Address;
   sameAs?: string;
+  url?: string;
 };
 
 type Performer = {
@@ -36,15 +39,16 @@ export interface EventJsonLdProps {
   organizers?: Organizer | Organizer[];
 }
 
-/*const buildLocation = (location: Location) => `
+const buildLocation = (location: Location) => `
   "location": {
-    "@type": "Place",
-    ${buildAddress(location.address)}
+    ${location.type ? `"@type": "${location.type}",` : ``}
+    ${location.url ? `"url": "${location.url}",` : ``}
+    ${location.address ? `${buildAddress(location.address)},` : ``}
     ${location.sameAs ? `"sameAs": "${location.sameAs}",` : ``}
-    "name": "${location.name}"
+    ${location.name ? `"name": "${location.name}",` : ``}
   },
 `;
-*/
+
 const buildPerformer = (performer: Performer) => `
   {
     "@type": "Person",
@@ -96,7 +100,7 @@ const EventJsonLd: FC<EventJsonLdProps> = ({
     }
     "startDate": "${startDate}",
     "endDate": "${endDate}",
-    ${location ? `"location":"${{ ...location }}",` : ``}
+    ${location ? `${buildLocation(location)},` : ``}
     ${images ? `"image":${formatIfArray(images)},` : ``}
     ${url ? `"url": "${url}",` : ``}
     ${description ? `"description": "${description}",` : ``}

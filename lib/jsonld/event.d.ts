@@ -1,9 +1,11 @@
 import { FC } from 'react';
 import { Address, AggregateOffer, Offers, Composer, Organizer } from '../types';
 declare type Location = {
-  name: string;
-  address: Address;
+  type: string;
+  name?: string;
+  address?: Address;
   sameAs?: string;
+  url?: string;
 };
 declare type Performer = {
   name: string;
