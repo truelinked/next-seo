@@ -157,9 +157,7 @@ const EventJsonLd: FC<EventJsonLdProps> = ({
     <Head>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={markup(
-          JSON.stringify(jslonld.replace(/(^[ \t]*\n)/gm, ''), undefined, 4),
-        )}
+        dangerouslySetInnerHTML={markup(jslonld.replace(/(^[ \t]*\n)/gm, ''))}
         key={`jsonld-video${keyOverride ? `-${keyOverride}` : ''}`}
       />
     </Head>
