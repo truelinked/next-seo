@@ -43,10 +43,10 @@ const buildLocation = (location: Location) => `
   "location": {
     ${location.type ? `"@type": "${location.type}",` : ``}
     ${location.url ? `"url": "${location.url}",` : ``}
-    ${location.address ? `${buildAddress(location.address)}` : ``}
+    ${location.address ? `${buildAddress(location.address)},` : ``}
     ${location.sameAs ? `"sameAs": "${location.sameAs}",` : ``}
     ${location.name ? `"name": "${location.name}",` : ``}
-  },
+  }
 `;
 
 const buildPerformer = (performer: Performer) => `
