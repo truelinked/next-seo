@@ -45,7 +45,7 @@ const buildLocation = (location: Location) => `
     ${location.url ? `"url": "${location.url}",` : ``}
     ${location.address ? `${buildAddress(location.address)},` : ``}
     ${location.sameAs ? `"sameAs": "${location.sameAs}",` : ``}
-    ${location.name ? `"name": "${location.name}",` : ``}
+    ${location.name ? `"name": "${location.name}"` : ``}
   }
 `;
 
@@ -67,7 +67,7 @@ const buildOrganization = (organizer: Organizer) => `
   {
     "@type": "Organization",
     "name": "${organizer.name}",
-    ${organizer.url ? `"url": "${encodeURI(organizer.url)}",` : ``}
+    ${organizer.url ? `"url": "${encodeURI(organizer.url)}"` : ``}
   }
 `;
 
