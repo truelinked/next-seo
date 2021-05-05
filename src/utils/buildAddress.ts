@@ -12,5 +12,5 @@ export default (address: Address) => `
     }
     "postalCode": "${address.postalCode}",
     "addressCountry": "${address.addressCountry}"
-  }
+  },
 `;

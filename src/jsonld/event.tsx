@@ -42,7 +42,7 @@ export interface EventJsonLdProps {
 const buildLocation = (location: Location) => `
   "location": {
     ${location.type ? `"@type": "${location.type}",` : ``}
-    ${location.address ? `${buildAddress(location.address)},` : ``}   
+    ${location.address ? `${buildAddress(location.address)}` : ``}   
     ${location.url ? `"url": "${location.url}",` : ``}
     ${location.sameAs ? `"sameAs": "${location.sameAs}"` : ``}
     ${location.name ? `"name": "${location.name}"` : ``}
