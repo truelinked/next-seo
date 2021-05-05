@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import Head from 'next/head';
 
 import markup from '../utils/markup';
+import escapeJsonLd from '../utils/escapeJsonLd';
 export interface DatasetJsonLdProps {
   description: string;
   name: string;
@@ -16,11 +17,11 @@ const DatasetJsonLd: FC<DatasetJsonLdProps> = ({
   const jslonld = `{
     "@context": "https://schema.org",
     "@type": "Dataset",
-    "description": "${description}",
-    "name": "${name}"${
+    "description": "${escapeJsonLd(description)}",
+    "name": "${escapeJsonLd(name)}"${
     license
       ? `,
-        "license": "${license}"`
+        "license": "${escapeJsonLd(license)}"`
       : ''
   }
   }`;

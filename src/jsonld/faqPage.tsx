@@ -2,6 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 
 import markup from '../utils/markup';
+import escapeJsonLd from '../utils/escapeJsonLd';
 export interface Question {
   questionName: string;
   acceptedAnswerText: string;
@@ -15,10 +16,10 @@ const buildQuestions = (mainEntity: Question[]) => `
   ${mainEntity.map(
     question => `{
       "@type": "Question",
-      "name": "${question.questionName}",
+      "name": "${escapeJsonLd(question.questionName)}",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "${question.acceptedAnswerText}"
+        "text": "${escapeJsonLd(question.acceptedAnswerText)}"
       }
   }`,
   )}`;

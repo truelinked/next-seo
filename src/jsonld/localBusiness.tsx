@@ -5,6 +5,7 @@ import markup from '../utils/markup';
 import formatIfArray from '../utils/formatIfArray';
 import buildAddress from '../utils/buildAddress';
 import { Address } from '../types';
+import escapeJsonLd from '../utils/escapeJsonLd';
 
 type Geo = {
   latitude: string;
@@ -98,9 +99,9 @@ const LocalBusinessJsonLd: FC<LocalBusinessJsonLdProps> = ({
     "@context": "https://schema.org",
     "@type": "${type}",
     ${id ? `"@id": "${id}",` : ''}
-    ${description ? `"description": "${description}",` : ''}
+    ${description ? `"description": "${escapeJsonLd(description)}",` : ''}
     ${url ? `"url": "${url}",` : ''}
-    ${telephone ? `"telephone": "${telephone}",` : ''}
+    ${telephone ? `"telephone": "${escapeJsonLd(telephone)}",` : ''}
     ${buildAddress(address)}
     ${geo ? `${buildGeo(geo)}` : ''}
     ${rating ? `${buildRating(rating)}` : ''}
@@ -117,7 +118,7 @@ const LocalBusinessJsonLd: FC<LocalBusinessJsonLdProps> = ({
           },`
         : ''
     }
-    "name": "${name}"
+    "name": "${escapeJsonLd(name)}"
   }`;
 
   return (

@@ -1,11 +1,12 @@
 import { BroadcastEvent, Clip, Video } from '../types';
 import formatIfArray from './formatIfArray';
+import escapeJsonLd from './escapeJsonLd';
 
 export default (video: Video, context: boolean = false) => `{
       ${context ? `"@context": "https://schema.org",` : ``}
       "@type": "VideoObject",
-      "name": "${video.name}",
-      "description": "${video.description}",
+      "name": "${escapeJsonLd(video.name)}",
+      "description": "${escapeJsonLd(video.description)}",
       "thumbnailUrl": [
           ${video.thumbnailUrls
             .map(thumbnailUrl => `"${thumbnailUrl}"`)
@@ -56,7 +57,7 @@ export default (video: Video, context: boolean = false) => `{
 const buildClip = (clip: Clip) => `
   "geo": {
     "@type": "Clip",
-    "name": "${clip.name}",
+    "name": "${escapeJsonLd(clip.name)}",
     "startOffset": ${clip.startOffset},
     "url": "${clip.url}"
   }
@@ -73,7 +74,7 @@ const buildInteractionStatistic = (watchCount: number) => `
 const buildBroadcastEvent = (publication: BroadcastEvent) => `
   "publication": {
     "@type": "BroadcastEvent",
-    "name": "${publication.name}",
+    "name": "${escapeJsonLd(publication.name)}",
     "isLiveBroadcast": ${publication.isLiveBroadcast},
     "startDate": "${publication.startDate}",
     "endDate": "${publication.endDate}"

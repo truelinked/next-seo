@@ -6,6 +6,7 @@ import formatAuthorName from '../utils/formatAuthorName';
 import buildVideo from '../utils/buildVideo';
 
 import { Video } from '../types';
+import escapeJsonLd from '../utils/escapeJsonLd';
 
 export type AggregateRating = {
   ratingValue: string;
@@ -29,8 +30,8 @@ type Instruction = {
 
 export const buildInstruction = (instruction: Instruction) => `{
   "@type": "HowToStep",
-  "name": "${instruction.name}",
-  "text": "${instruction.text}",
+  "name": "${escapeJsonLd(instruction.name)}",
+  "text": "${escapeJsonLd(instruction.text)}",
   "url": "${instruction.url}",
   "image": "${instruction.image}"
 }`;
@@ -77,8 +78,8 @@ const RecipeJsonLd: FC<RecipeJsonLdProps> = ({
   const jslonld = `{
     "@context": "https://schema.org/",
     "@type": "Recipe",
-    "name": "${name}",
-    "description": "${description}",
+    "name": "${escapeJsonLd(name)}",
+    "description": "${escapeJsonLd(description)}",
     "datePublished": "${datePublished}",
     "author": ${formatAuthorName(authorName)},
     "image": [
@@ -87,10 +88,10 @@ const RecipeJsonLd: FC<RecipeJsonLdProps> = ({
     ${prepTime ? `"prepTime": "${prepTime}",` : ``}
     ${cookTime ? `"cookTime": "${cookTime}",` : ``}
     ${totalTime ? `"totalTime": "${totalTime}",` : ``}
-    ${keywords ? `"keywords": "${keywords}",` : ``}
-    ${yields ? `"recipeYield": "${yields}",` : ``}
-    ${category ? `"recipeCategory": "${category}",` : ``}
-    ${cuisine ? `"recipeCuisine": "${cuisine}",` : ``}
+    ${keywords ? `"keywords": "${escapeJsonLd(keywords)}",` : ``}
+    ${yields ? `"recipeYield": "${escapeJsonLd(yields)}",` : ``}
+    ${category ? `"recipeCategory": "${escapeJsonLd(category)}",` : ``}
+    ${cuisine ? `"recipeCuisine": "${escapeJsonLd(cuisine)}",` : ``}
     ${
       calories
         ? `"nutrition": { "@type": "NutritionInformation", "calories": "${calories} calories" },`

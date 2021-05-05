@@ -3,6 +3,7 @@ import Head from 'next/head';
 
 import markup from '../utils/markup';
 import formatAuthorName from '../utils/formatAuthorName';
+import escapeJsonLd from '../utils/escapeJsonLd';
 
 export interface BlogJsonLdProps {
   keyOverride?: string;
@@ -32,14 +33,14 @@ const BlogJsonLd: FC<BlogJsonLdProps> = ({
       "@type": "WebPage",
       "@id": "${url}"
     },
-    "headline": "${title}",
+    "headline": "${escapeJsonLd(title)}",
     "image": [
       ${images.map(image => `"${image}"`)}
      ],
     "datePublished": "${datePublished}",
     "dateModified": "${dateModified || datePublished}",
     "author": ${formatAuthorName(authorName)},
-    "description": "${description}"
+    "description": "${escapeJsonLd(description)}"
   }`;
 
   return (

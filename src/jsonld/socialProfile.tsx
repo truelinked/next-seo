@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import Head from 'next/head';
 
 import markup from '../utils/markup';
+import escapeJsonLd from '../utils/escapeJsonLd';
 export interface SocialProfileJsonLdProps {
   keyOverride?: string;
   type: string;
@@ -20,7 +21,7 @@ const SocialProfileJsonLd: FC<SocialProfileJsonLdProps> = ({
   const jslonld = `{
     "@context": "https://schema.org",
     "@type": "${type}",
-    "name": "${name}",
+    "name": "${escapeJsonLd(name)}",
     "url": "${url}",
     "sameAs": [
       ${sameAs.map(socialUrl => `"${socialUrl}"`)}

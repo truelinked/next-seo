@@ -9,6 +9,7 @@ import {
   buildReviewRating,
 } from './product';
 import { AggregateRating, buildAggregateRating } from './recipe';
+import escapeJsonLd from '../utils/escapeJsonLd';
 
 export interface SoftwareAppJsonLdProps {
   keyOverride?: string;
@@ -31,7 +32,11 @@ const buildReview = (review: Review) => `
             ? `"datePublished": "${review.datePublished}",`
             : ''
         }
-        ${review.reviewBody ? `"reviewBody": "${review.reviewBody}",` : ''}
+        ${
+          review.reviewBody
+            ? `"reviewBody": "${escapeJsonLd(review.reviewBody)}",`
+            : ''
+        }
         ${review.name ? `"name": "${review.name}",` : ''}
         ${buildReviewRating(review.reviewRating)}
       },
@@ -57,13 +62,17 @@ const SoftwareAppJsonLd: FC<SoftwareAppJsonLdProps> = ({
     },
     ${
       applicationCategory
-        ? `"applicationCategory": "${applicationCategory}",`
+        ? `"applicationCategory": "${escapeJsonLd(applicationCategory)}",`
         : ''
     }
-    ${operatingSystem ? `"operatingSystem": "${operatingSystem}",` : ''}
+    ${
+      operatingSystem
+        ? `"operatingSystem": "${escapeJsonLd(operatingSystem)}",`
+        : ''
+    }
     ${aggregateRating ? buildAggregateRating(aggregateRating) : ''}
     ${review ? buildReview(review) : ''}
-    "name": "${name}"
+    "name": "${escapeJsonLd(name)}"
   }`;
 
   return (

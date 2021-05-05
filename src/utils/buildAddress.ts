@@ -1,16 +1,17 @@
 import { Address } from '../types';
+import escapeJsonLd from './escapeJsonLd';
 
 export default (address: Address) => `
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "${address.streetAddress}",
-    "addressLocality": "${address.addressLocality}",
+    "streetAddress": "${escapeJsonLd(address.streetAddress)}",
+    "addressLocality": "${escapeJsonLd(address.addressLocality)}",
     ${
       address.addressRegion
-        ? `"addressRegion": "${address.addressRegion}",`
+        ? `"addressRegion": "${escapeJsonLd(address.addressRegion)}",`
         : ''
     }
-    "postalCode": "${address.postalCode}",
-    "addressCountry": "${address.addressCountry}"
+    "postalCode": "${escapeJsonLd(address.postalCode)}",
+    "addressCountry": "${escapeJsonLd(address.addressCountry)}"
   },
 `;

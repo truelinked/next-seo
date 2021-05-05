@@ -3,6 +3,7 @@ import Head from 'next/head';
 
 import markup from '../utils/markup';
 import formatAuthorName from '../utils/formatAuthorName';
+import escapeJsonLd from '../utils/escapeJsonLd';
 
 export interface NewsArticleJsonLdProps {
   keyOverride?: string;
@@ -44,26 +45,26 @@ const NewsArticleJsonLd: FC<NewsArticleJsonLdProps> = ({
       "@type": "WebPage",
       "@id": "${url}"
     },
-    "headline": "${title}",
+    "headline": "${escapeJsonLd(title)}",
     "image": [
       ${images.map(image => `"${image}"`)}
      ],
-    "articleSection":"${section}",
-    "keywords": "${keywords}",
+    "articleSection":"${escapeJsonLd(section)}",
+    "keywords": "${escapeJsonLd(keywords)}",
     "datePublished": "${datePublished}",
     "dateCreated": "${dateCreated || datePublished}",
     "dateModified": "${dateModified || datePublished}",
     "author": ${formatAuthorName(authorName)},
     "publisher": {
       "@type": "Organization",
-      "name": "${publisherName}",
+      "name": "${escapeJsonLd(publisherName)}",
       "logo": {
         "@type": "ImageObject",
         "url": "${publisherLogo}"
       }
     },
-    "description": "${description}",
-    "articleBody": "${body}"
+    "description": "${escapeJsonLd(description)}",
+    "articleBody": "${escapeJsonLd(body)}"
   }`;
 
   return (

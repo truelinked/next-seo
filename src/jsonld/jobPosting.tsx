@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import Head from 'next/head';
 
 import markup from '../utils/markup';
+import escapeJsonLd from '../utils/escapeJsonLd';
 export interface HiringOrganization {
   name: string;
   sameAs: string;
@@ -51,7 +52,11 @@ export interface JobPostingJsonLdProps {
 const buildBaseSalary = (baseSalary: MonetaryAmount) => `
   "baseSalary": {
     "@type": "MonetaryAmount",
-    ${baseSalary.currency ? `"currency": "${baseSalary.currency}",` : ''}
+    ${
+      baseSalary.currency
+        ? `"currency": "${escapeJsonLd(baseSalary.currency)}",`
+        : ''
+    }
     "value": {
       ${
         baseSalary.value
@@ -84,12 +89,12 @@ const JobPostingJsonLd: FC<JobPostingJsonLdProps> = ({
     "@type": "JobPosting",
     ${baseSalary ? buildBaseSalary(baseSalary) : ''}
     "datePosted": "${datePosted}",
-    "description": "${description}",
+    "description": "${escapeJsonLd(description)}",
     ${employmentType ? `"employmentType": "${employmentType}",` : ''}
     "hiringOrganization" : {
       "@type" : "Organization",
-      "name" : "${hiringOrganization.name}",
-      "sameAs" : "${hiringOrganization.sameAs}"
+      "name" : "${escapeJsonLd(hiringOrganization.name)}",
+      "sameAs" : "${escapeJsonLd(hiringOrganization.sameAs)}"
       ${hiringOrganization.logo ? `,"logo": "${hiringOrganization.logo}"` : ''}
     },
     ${
@@ -98,11 +103,11 @@ const JobPostingJsonLd: FC<JobPostingJsonLdProps> = ({
       "@type": "Place",
       "address": {
         "@type": "PostalAddress",
-        "addressLocality": "${jobLocation.addressLocality}",
-        "addressRegion": "${jobLocation.addressRegion}",
-        "postalCode" : "${jobLocation.postalCode}",
-        "streetAddress" : "${jobLocation.streetAddress}",
-        "addressCountry" : "${jobLocation.addressCountry}"
+        "addressLocality": "${escapeJsonLd(jobLocation.addressLocality)}",
+        "addressRegion": "${escapeJsonLd(jobLocation.addressRegion)}",
+        "postalCode" : "${escapeJsonLd(jobLocation.postalCode)}",
+        "streetAddress" : "${escapeJsonLd(jobLocation.streetAddress)}",
+        "addressCountry" : "${escapeJsonLd(jobLocation.addressCountry)}"
           }
       },`
         : ''
@@ -111,13 +116,17 @@ const JobPostingJsonLd: FC<JobPostingJsonLdProps> = ({
       applicantLocationRequirements
         ? ` "applicantLocationRequirements": {
         "@type": "Country",
-        "name": "${applicantLocationRequirements}"
+        "name": "${escapeJsonLd(applicantLocationRequirements)}"
     },`
         : ''
     }
-    ${jobLocationType ? `"jobLocationType": "${jobLocationType}",` : ''}
-    ${validThrough ? `"validThrough": "${validThrough}",` : ''}
-    "title": "${title}"
+    ${
+      jobLocationType
+        ? `"jobLocationType": "${escapeJsonLd(jobLocationType)}",`
+        : ''
+    }
+    ${validThrough ? `"validThrough": "${escapeJsonLd(validThrough)}",` : ''}
+    "title": "${escapeJsonLd(title)}"
   }`;
 
   return (

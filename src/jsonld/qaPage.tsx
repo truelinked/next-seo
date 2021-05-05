@@ -2,6 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 
 import markup from '../utils/markup';
+import escapeJsonLd from '../utils/escapeJsonLd';
 
 export interface Person {
   name: string;
@@ -33,8 +34,8 @@ export interface QAPageJsonldProps {
 
 const buildQuestions = (mainEntity: Question) => `{
         "@type": "Question",
-        "name": "${mainEntity.name}",
-        ${mainEntity.text ? `"text": "${mainEntity.text}",` : ''}
+        "name": "${escapeJsonLd(mainEntity.name)}",
+        ${mainEntity.text ? `"text": "${escapeJsonLd(mainEntity.text)}",` : ''}
         "answerCount": ${mainEntity.answerCount},
         ${
           mainEntity.upvotedCount
@@ -50,7 +51,7 @@ const buildQuestions = (mainEntity: Question) => `{
           mainEntity.author
             ? `"author": {
           "@type": "Person",
-          "name": "${mainEntity.author.name}"
+          "name": "${escapeJsonLd(mainEntity.author.name)}"
         },`
             : ''
         }
@@ -58,7 +59,7 @@ const buildQuestions = (mainEntity: Question) => `{
           mainEntity.acceptedAnswer
             ? `"acceptedAnswer": {
           "@type": "Answer",
-          "text": "${mainEntity.acceptedAnswer.text}",
+          "text": "${escapeJsonLd(mainEntity.acceptedAnswer.text)}",
           ${
             mainEntity.acceptedAnswer.dateCreated
               ? `"dateCreated": "${mainEntity.acceptedAnswer.dateCreated}",`
@@ -78,7 +79,7 @@ const buildQuestions = (mainEntity: Question) => `{
             mainEntity.acceptedAnswer.author
               ? `"author": {
             "@type": "Person",
-            "name": "${mainEntity.acceptedAnswer.author.name}"
+            "name": "${escapeJsonLd(mainEntity.acceptedAnswer.author.name)}"
           }`
               : ''
           }
@@ -90,7 +91,7 @@ const buildQuestions = (mainEntity: Question) => `{
             ? `"suggestedAnswer": [${mainEntity.suggestedAnswer.map(
                 suggested => `{
             "@type": "Answer",
-            "text": "${suggested.text}",
+            "text": "${escapeJsonLd(suggested.text)}",
             ${
               suggested.dateCreated
                 ? `"dateCreated": "${suggested.dateCreated}",`
@@ -106,7 +107,7 @@ const buildQuestions = (mainEntity: Question) => `{
                 suggested.author
                   ? `"author": {
                         "@type": "Person",
-                        "name": "${suggested.author.name}"
+                        "name": "${escapeJsonLd(suggested.author.name)}"
                     }`
                   : ''
               }

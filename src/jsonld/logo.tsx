@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import Head from 'next/head';
 
 import markup from '../utils/markup';
+import escapeJsonLd from '../utils/escapeJsonLd';
 export interface LogoJsonLdProps {
   keyOverride?: string;
   logo: string;
@@ -13,7 +14,7 @@ const LogoJsonLd: FC<LogoJsonLdProps> = ({ keyOverride, url, logo }) => {
     "@context": "https://schema.org",
     "@type": "Organization",
     "url": "${url}",
-    "logo": "${logo}"
+    "logo": "${escapeJsonLd(logo)}"
   }`;
 
   return (

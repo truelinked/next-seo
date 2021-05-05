@@ -1,11 +1,16 @@
 import { AggregateOffer } from '../types';
+import escapeJsonLd from './escapeJsonLd';
 
 export const buildAggregateOffer = (offer: AggregateOffer) => `
   {
     "@type": "AggregateOffer",
-    "priceCurrency": "${offer.priceCurrency}",
-    ${offer.highPrice ? `"highPrice": "${offer.highPrice}",` : ''}
-    ${offer.offerCount ? `"offerCount": "${offer.offerCount}",` : ''}
-    "lowPrice": "${offer.lowPrice}"
+    "priceCurrency": "${escapeJsonLd(offer.priceCurrency)}",
+    ${offer.highPrice ? `"highPrice": "${escapeJsonLd(offer.highPrice)}",` : ''}
+    ${
+      offer.offerCount
+        ? `"offerCount": "${escapeJsonLd(offer.offerCount)}",`
+        : ''
+    }
+    "lowPrice": "${escapeJsonLd(offer.lowPrice)}"
   }
 `;

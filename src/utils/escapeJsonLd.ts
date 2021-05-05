@@ -1,6 +1,9 @@
-const escapeJsonLd = (jsonld: string) => {
+const escapeJsonLd = (input: string | undefined | null) => {
   try {
-    return jsonld.replace(/\n/g, ' ').replace(/\\([\s\S])|(")/g, '\\$1$2');
+    if (typeof input !== 'string') {
+      return input;
+    }
+    return input.replace(/\n/g, ' ').replace(/\\([\s\S])|(")/g, '\\$1$2');
   } catch (e) {
     console.log('escapeJsonLd error:', e);
   }

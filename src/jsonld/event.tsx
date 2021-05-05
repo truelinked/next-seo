@@ -7,6 +7,7 @@ import buildAddress from '../utils/buildAddress';
 import { Address, AggregateOffer, Offers, Composer, Organizer } from '../types';
 import { buildOffers } from '../utils/buildOffers';
 import { buildAggregateOffer } from '../utils/buildAggregateOffer';
+import escapeJsonLd from '../utils/escapeJsonLd';
 
 type Location = {
   type: string;
@@ -41,32 +42,32 @@ export interface EventJsonLdProps {
 
 const buildLocation = (location: Location) => `
   "location": {
-    ${location.type ? `"@type": "${location.type}",` : ``}
+    ${location.type ? `"@type": "${escapeJsonLd(location.type)}",` : ``}
     ${location.address ? `${buildAddress(location.address)}` : ``}   
     ${location.url ? `"url": "${location.url}",` : ``}
-    ${location.sameAs ? `"sameAs": "${location.sameAs}"` : ``}
-    ${location.name ? `"name": "${location.name}"` : ``}
+    ${location.sameAs ? `"sameAs": "${escapeJsonLd(location.sameAs)}"` : ``}
+    ${location.name ? `"name": "${escapeJsonLd(location.name)}"` : ``}
   }
 `;
 
 const buildPerformer = (performer: Performer) => `
   {
     "@type": "Person",
-    "name": "${performer.name}"
+    "name": "${escapeJsonLd(performer.name)}"
   }
 `;
 
 const buildComposer = (composer: Composer) => `
   {
     "@type": "Person",
-    "name": "${composer.name}"
+    "name": "${escapeJsonLd(composer.name)}"
   }
 `;
 
 const buildOrganization = (organizer: Organizer) => `
   {
     "@type": "Organization",
-    "name": "${organizer.name}",
+    "name": "${escapeJsonLd(organizer.name)}",
     ${organizer.url ? `"url": "${encodeURI(organizer.url)}"` : ``}
   }
 `;
@@ -103,7 +104,7 @@ const EventJsonLd: FC<EventJsonLdProps> = ({
     ${location ? `${buildLocation(location)},` : ``}
     ${images ? `"image":${formatIfArray(images)},` : ``}
     ${url ? `"url": "${url}",` : ``}
-    ${description ? `"description": "${description}",` : ``}
+    ${description ? `"description": "${escapeJsonLd(description)}",` : ``}
     
     ${
       offers
@@ -150,7 +151,7 @@ const EventJsonLd: FC<EventJsonLdProps> = ({
           },`
         : ''
     }
-    "name": "${name}"
+    "name": "${escapeJsonLd(name)}"
   }`;
 
   return (

@@ -6,6 +6,7 @@ import formatIfArray from '../utils/formatIfArray';
 import { AggregateOffer, Offers } from '../types';
 import { buildOffers } from '../utils/buildOffers';
 import { buildAggregateOffer } from '../utils/buildAggregateOffer';
+import escapeJsonLd from '../utils/escapeJsonLd';
 
 export type ReviewRating = {
   bestRating?: string;
@@ -57,7 +58,7 @@ export interface ProductJsonLdProps {
 const buildBrand = (brand: string) => `
   "brand": {
       "@type": "Thing",
-      "name": "${brand}"
+      "name": "${escapeJsonLd(brand)}"
     },
 `;
 
@@ -74,14 +75,14 @@ export const buildReviewRating = (rating: ReviewRating) =>
 export const buildAuthor = (author: Author) => `
   "author": {
       "@type": "${author.type}",
-      "name": "${author.name}"
+      "name": "${escapeJsonLd(author.name)}"
   },
 `;
 
 export const buildPublisher = (publisher: Publisher) => `
   "publisher": {
       "@type": "${publisher.type}",
-      "name": "${publisher.name}"
+      "name": "${escapeJsonLd(publisher.name)}"
   },
 `;
 
@@ -131,7 +132,7 @@ const ProductJsonLd: FC<ProductJsonLdProps> = ({
     "@context": "https://schema.org/",
     "@type": "Product",
     "image":${formatIfArray(images)},
-    ${description ? `"description": "${description}",` : ''}
+    ${description ? `"description": "${escapeJsonLd(description)}",` : ''}
     ${mpn ? `"mpn": "${mpn}",` : ''}
     ${sku ? `"sku": "${sku}",` : ''}
     ${gtin8 ? `"gtin8": "${gtin8}",` : ''}
@@ -154,7 +155,7 @@ const ProductJsonLd: FC<ProductJsonLdProps> = ({
         ? `"offers": ${buildAggregateOffer(aggregateOffer)},`
         : ''
     }
-    "name": "${productName}"
+    "name": "${escapeJsonLd(productName)}"
   }`;
 
   return (
