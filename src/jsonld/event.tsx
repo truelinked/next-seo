@@ -76,8 +76,8 @@ const buildComposer = (composer: Composer) => `
 const buildOrganization = (organizer: Organizer) => `
   {
     "@type": "Organization",
-    "name": "${escapeJsonLd(organizer.name)}",
-    ${organizer.url ? `"url": "${encodeURI(organizer.url)}"` : ``}
+    "name": "${escapeJsonLd(organizer.name)}"
+    ${organizer.url ? `",url": "${encodeURI(organizer.url)}"` : ``}
   }
 `;
 
