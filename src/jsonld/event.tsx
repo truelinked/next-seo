@@ -40,15 +40,24 @@ export interface EventJsonLdProps {
   organizers?: Organizer | Organizer[];
 }
 
-const buildLocation = (location: Location) => `
-  "location": {
-    ${location.type ? `"@type": "${escapeJsonLd(location.type)}",` : ``}
-    ${location.address ? `${buildAddress(location.address)}` : ``}   
-    ${location.url ? `"url": "${location.url}",` : ``}
-    ${location.sameAs ? `"sameAs": "${escapeJsonLd(location.sameAs)}"` : ``}
-    ${location.name ? `"name": "${escapeJsonLd(location.name)}"` : ``}
-  }
-`;
+const buildLocation = (location: Location) => {
+  try {
+    const data = `
+    {
+      ${location.address ? `${buildAddress(location.address)}` : ``}
+      ${location.type ? `"@type": "${escapeJsonLd(location.type)}"` : ``}
+      ${location.url ? `,"url": "${location.url}"` : ``}
+      ${location.sameAs ? `,"sameAs": "${escapeJsonLd(location.sameAs)}"` : ``}
+      ${location.name ? `",name": "${escapeJsonLd(location.name)}"` : ``}
+    }
+  `;
+
+    const obj = JSON.parse(data);
+    return `"location": ${JSON.stringify(obj, null, 2)}`;
+  } catch (e) {}
+
+  return '';
+};
 
 const buildPerformer = (performer: Performer) => `
   {
@@ -90,6 +99,8 @@ const EventJsonLd: FC<EventJsonLdProps> = ({
   composers,
   organizers,
 }) => {
+  const locationJSONLD = buildLocation(location);
+
   const jslonld = `{
     "@context": "https://schema.org",
     "@type": "${eventType ? eventType : 'Event'}",
@@ -101,7 +112,7 @@ const EventJsonLd: FC<EventJsonLdProps> = ({
     }
     "startDate": "${startDate}",
     "endDate": "${endDate}",
-    ${location ? `${buildLocation(location)},` : ``}
+    ${locationJSONLD ? `${locationJSONLD},` : ``}
     ${images ? `"image":${formatIfArray(images)},` : ``}
     ${url ? `"url": "${url}",` : ``}
     ${description ? `"description": "${escapeJsonLd(description)}",` : ``}
