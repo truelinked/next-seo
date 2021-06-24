@@ -48,7 +48,7 @@ const buildLocation = (location: Location) => {
       ${location.type ? `"@type": "${escapeJsonLd(location.type)}"` : ``}
       ${location.url ? `,"url": "${location.url}"` : ``}
       ${location.sameAs ? `,"sameAs": "${escapeJsonLd(location.sameAs)}"` : ``}
-      ${location.name ? `",name": "${escapeJsonLd(location.name)}"` : ``}
+      ${location.name ? `,"name": "${escapeJsonLd(location.name)}"` : ``}
     }
   `;
 
