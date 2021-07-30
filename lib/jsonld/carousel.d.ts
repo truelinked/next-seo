@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import { CourseJsonLdProps } from './course';
-import { Review, AggregateRating } from './product';
 import { RecipeJsonLdProps } from './recipe';
+import { CourseJsonLdProps } from './course';
+import { AggregateRating, Review } from '../types';
 declare type Director = {
   name: string;
 };

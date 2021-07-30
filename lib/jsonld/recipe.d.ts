@@ -1,14 +1,7 @@
 import { FC } from 'react';
-import { Video } from '../types';
-export declare type AggregateRating = {
-  ratingValue: string;
-  ratingCount: string;
-};
-export declare const buildAggregateRating: (
-  aggregateRating: AggregateRating,
-) => string;
+import { Video, AggregateRating } from '../types';
 declare type Instruction = {
-  name: string;
+  name?: string;
   text: string;
   url?: string;
   image?: string;

@@ -1,6 +1,5 @@
 import { FC } from 'react';
-import { Review } from './product';
-import { AggregateRating } from './recipe';
+import { AggregateRating, Review } from '../types';
 export interface SoftwareAppJsonLdProps {
   keyOverride?: string;
   name: string;
