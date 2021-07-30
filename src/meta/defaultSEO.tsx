@@ -4,7 +4,7 @@ import buildTags from './buildTags';
 
 import { DefaultSeoProps } from '../types';
 
-export default class extends Component<DefaultSeoProps, {}> {
+export default class DefaultSeo extends Component<DefaultSeoProps, {}> {
   render() {
     const {
       title,
@@ -24,6 +24,7 @@ export default class extends Component<DefaultSeoProps, {}> {
       defaultOpenGraphVideoHeight,
       mobileAlternate,
       languageAlternates,
+      additionalLinkTags,
     } = this.props;
 
     return (
@@ -46,6 +47,7 @@ export default class extends Component<DefaultSeoProps, {}> {
           defaultOpenGraphVideoHeight,
           mobileAlternate,
           languageAlternates,
+          additionalLinkTags,
         })}
       </Head>
     );

@@ -18,6 +18,9 @@ import {
   SiteLinksSearchBoxJsonLd,
   QAPageJsonld,
   SoftwareAppJsonLd,
+  ProfilePageJsonLd,
+  CollectionPageJsonLd,
+  VideoGameJsonLd,
 } from '../..';
 import Links from '../components/links';
 
@@ -133,6 +136,82 @@ const JsonLD = () => (
           validThrough: '2020-04-02',
         },
       ]}
+      rating={{
+        ratingValue: '4.5',
+        ratingCount: '2',
+      }}
+      review={[
+        {
+          author: 'John Doe',
+          datePublished: '2006-05-04',
+          name: 'A masterpiece of literature',
+          reviewBody:
+            'I really enjoyed this book. It captures the essential challenge people face as they try make sense of their lives and grow to adulthood.',
+          reviewRating: {
+            bestRating: '5',
+            worstRating: '1',
+            reviewAspect: 'Ambiance',
+            ratingValue: '4',
+          },
+        },
+        {
+          author: 'Bob Smith',
+          datePublished: '2006-06-15',
+          name: 'A good read.',
+          reviewBody:
+            "Catcher in the Rye is a fun book. It's a good book to read.",
+          reviewRating: {
+            ratingValue: '4',
+          },
+        },
+      ]}
+      makesOffer={[
+        {
+          priceSpecification: {
+            type: 'UnitPriceSpecification',
+            priceCurrency: 'EUR',
+            price: '1000-10000',
+          },
+          itemOffered: {
+            name: 'Motion Design Services',
+            description:
+              'We are the expert of animation and motion design productions.',
+          },
+        },
+        {
+          priceSpecification: {
+            type: 'UnitPriceSpecification',
+            priceCurrency: 'EUR',
+            price: '2000-10000',
+          },
+          itemOffered: {
+            name: 'Branding Services',
+            description:
+              'Real footage is a powerful tool when it comes to show what the business is about. Can be used to present your company, show your factory, promote a product packshot, or just tell any story. It can help create emotional links with your audience by showing punchy images.',
+          },
+        },
+      ]}
+      areaServed={[
+        {
+          geoMidpoint: {
+            latitude: '41.108237',
+            longitude: '-80.642982',
+          },
+          geoRadius: '1000',
+        },
+        {
+          geoMidpoint: {
+            latitude: '51.108237',
+            longitude: '-80.642982',
+          },
+          geoRadius: '1000',
+        },
+      ]}
+      action={{
+        actionName: 'potentialAction',
+        actionType: 'ReviewAction',
+        target: 'https://www.example.com/review/this/business',
+      }}
     />
 
     <LogoJsonLd
@@ -155,6 +234,16 @@ const JsonLD = () => (
       ]}
       description="Sleeker than ACME's Classic Anvil, the Executive Anvil is perfect for the business traveler looking for something to drop from a height."
       brand="ACME"
+      color="blue"
+      manufacturerName="Gary Meehan"
+      manufacturerLogo="https://www.example.com/photos/logo.jpg"
+      material="steel"
+      slogan="For the business traveller looking for something to drop from a height."
+      disambiguatingDescription="Executive Anvil, perfect for the business traveller."
+      releaseDate="2014-02-05T08:00:00+08:00"
+      productionDate="2015-02-05T08:00:00+08:00"
+      purchaseDate="2015-02-06T08:00:00+08:00"
+      award="Best Executive Anvil Award."
       reviews={[
         {
           author: {
@@ -177,8 +266,10 @@ const JsonLD = () => (
         },
       ]}
       aggregateRating={{
-        ratingValue: '4.4',
+        ratingValue: '44',
         reviewCount: '89',
+        ratingCount: '684',
+        bestRating: '100',
       }}
       offers={[
         {
@@ -337,7 +428,7 @@ const JsonLD = () => (
       applicantLocationRequirements="FR"
       keyOverride="second-job-posting-with-salary-range"
     />
-  
+
     <EventJsonLd
       name="My Event"
       startDate="2020-01-23T00:00:00.000Z"
@@ -430,8 +521,7 @@ const JsonLD = () => (
       instructions={[
         {
           name: 'Preheat',
-          text:
-            'Preheat the oven to 350 degrees F. Grease and flour a 9x9 inch pan.',
+          text: 'Preheat the oven to 350 degrees F. Grease and flour a 9x9 inch pan.',
           url: 'https://example.com/party-coffee-cake#step1',
           image: 'https://example.com/photos/party-coffee-cake/step1.jpg',
         },
@@ -474,8 +564,7 @@ const JsonLD = () => (
     <QAPageJsonld
       mainEntity={{
         name: 'How many ounces are there in a pound?',
-        text:
-          'I have taken up a new interest in baking and keep running across directions in ounces and pounds. I have to translate between them and was wondering how many ounces are in a pound?',
+        text: 'I have taken up a new interest in baking and keep running across directions in ounces and pounds. I have to translate between them and was wondering how many ounces are in a pound?',
         answerCount: 3,
         upvotedCount: 26,
         dateCreated: '2016-07-23T21:11Z',
@@ -491,8 +580,7 @@ const JsonLD = () => (
         },
         suggestedAnswer: [
           {
-            text:
-              'Are you looking for ounces or fluid ounces? If you are looking for fluid ounces there are 15.34 fluid ounces in a pound of water.',
+            text: 'Are you looking for ounces or fluid ounces? If you are looking for fluid ounces there are 15.34 fluid ounces in a pound of water.',
             dateCreated: '2016-11-02T21:11Z',
             upvotedCount: 42,
             url: 'https://example.com/question1#suggestedAnswer1',
@@ -520,6 +608,113 @@ const JsonLD = () => (
       aggregateRating={{ ratingValue: '4.6', ratingCount: '8864' }}
       operatingSystem="ANDROID"
       applicationCategory="GameApplication"
+    />
+
+    <CollectionPageJsonLd
+      name="Resistance 3: Fall of Man"
+      hasPart={[
+        {
+          about:
+            'Britten Four Sea Interludes and Passacaglia from Peter Grimes',
+          author: 'John Doe',
+          name: 'Schema.org Ontology',
+          datePublished: '2021-03-09',
+          audience: 'Internet',
+          keywords: 'schema',
+          thumbnailUrl: 'https://i.ytimg.com/vi/eXSJ3PO9Tas/hqdefault.jpg',
+          image: 'hqdefault.jpg',
+        },
+        {
+          about: 'Shostakovich Symphony No. 7 (Leningrad)',
+          author: 'John Smith',
+          name: 'Creative work name',
+          datePublished: '2014-10-01T19:30',
+        },
+      ]}
+    />
+
+    <ProfilePageJsonLd
+      lastReviewed="2014-10-01T19:30"
+      breadcrumb={[
+        {
+          position: 1,
+          name: 'Books',
+          item: 'https://example.com/books',
+        },
+        {
+          position: 2,
+          name: 'Authors',
+          item: 'https://example.com/books/authors',
+        },
+      ]}
+    />
+
+    <VideoGameJsonLd
+      name="Red Dead Redemption 2"
+      translatorName={['Translator 1', 'Translator 2']}
+      languageName={['English', 'Kurdish']}
+      description="Arthur Morgan and the Van der Linde gang are outlaws on the run. With federal agents and the best bounty hunters in the nation massing on their heels, the gang must rob, steal and fight their way across the rugged heartland of America in order to survive."
+      processorRequirements="4 GHz"
+      memoryRequirements="16 Gb"
+      playMode="SinglePlayer"
+      applicationCategory="Game"
+      url="https://example.com/rdr2-game"
+      platformName={['PC game', 'PlayStation 4']}
+      operatingSystemName="windows"
+      keywords="outlaw, gang, federal agents"
+      datePublished="2019-02-05T08:00:00+08:00"
+      image="https://example.com/photos/1x1/photo.jpg"
+      publisherName="Vertical Games"
+      producerName="Rockstar Games"
+      producerUrl="https//www.example.com/producer"
+      offers={[
+        {
+          price: '119.99',
+          priceCurrency: 'USD',
+          priceValidUntil: '2020-11-05',
+          availability: 'https://schema.org/InStock',
+          url: 'https://example.net/rdr2-game',
+          seller: {
+            name: 'Executive Gaming',
+          },
+        },
+        {
+          price: '139.99',
+          priceCurrency: 'CAD',
+          priceValidUntil: '2020-09-05',
+          availability: 'https://schema.org/InStock',
+          url: 'https://example.org/rdr2-game',
+          seller: {
+            name: 'Executive Gaming',
+          },
+        },
+      ]}
+      aggregateRating={{
+        ratingValue: '44',
+        reviewCount: '89',
+        ratingCount: '684',
+        bestRating: '100',
+      }}
+      reviews={[
+        {
+          author: {
+            type: 'Person',
+            name: 'AhmetKaya',
+          },
+          publisher: {
+            type: 'Organization',
+            name: 'Gam Production',
+          },
+          datePublished: '2017-01-06T03:37:40Z',
+          reviewBody: 'Iki gozum.',
+          name: 'Rica ederim.',
+          reviewRating: {
+            bestRating: '5',
+            ratingValue: '5',
+            worstRating: '1',
+          },
+        },
+      ]}
     />
 
     <Links />

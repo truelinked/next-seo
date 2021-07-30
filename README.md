@@ -34,6 +34,7 @@ looking for inspiration on what to add.
     - [Canonical URL](#canonical-url)
     - [Alternate](#alternate)
     - [Additional Meta Tags](#additional-meta-tags)
+    - [Additional Link Tags](#additional-link-tags)
 - [Open Graph](#open-graph)
   - [Open Graph Examples](#open-graph-examples)
     - [Basic](#basic)
@@ -59,8 +60,11 @@ looking for inspiration on what to add.
   - [Social Profile](#social-profile)
   - [News Article](#news-article)
   - [Video](#video-1)
+  - [VideoGame](#videogame)
   - [Event](#event)
   - [Q&A](#qa)
+  - [Collection Page](#collection-page)
+  - [Profile page](#profile-page)
   - [Carousel](#carousel)
     - [Default (Summary List)](#default-summary-list)
     - [Course](#course-1)
@@ -169,7 +173,7 @@ Some tools may report this an error. See [Issue #14](https://github.com/garmeeh/
 
 `NextSeo` enables you to set some default SEO properties that will appear on all pages without needing to do include anything on them. You can also override these on a page by page basis if needed.
 
-To achieve this, you will need to create a custom `<App>`. In your pages directory create a new file, `_app.js`. See the Next.js docs [here](https://github.com/zeit/next.js/#custom-app) for more info on a custom `<App>`.
+To achieve this, you will need to create a custom `<App>`. In your pages directory create a new file, `_app.js`. See the Next.js docs [here](https://nextjs.org/docs/advanced-features/custom-app) for more info on a custom `<App>`.
 
 Within this file you will need to import `DefaultSeo` from `next-seo` and pass it props.
 
@@ -252,13 +256,14 @@ From now on all of your pages will have the defaults above applied.
 | `defaultTitle`                     | string                  | If no title is set on a page, this string will be used instead of an empty `titleTemplate` [More Info](#default-title)                                                               |
 | `noindex`                          | boolean (default false) | Sets whether page should be indexed or not [More Info](#no-index)                                                                                                                    |
 | `nofollow`                         | boolean (default false) | Sets whether page should be followed or not [More Info](#no-follow)                                                                                                                  |
-| `additionRobotsProps`              | Object                  | Set the more meta information for the `X-Robots-Tag` [More Info](#additionalrobotsprops)                                                                                             |
+| `additionRobotsProps`              | Object                  | Set the more meta information for the `X-Robots-Tag` [More Info](#robotsprops)                                                                                                       |
 | `description`                      | string                  | Set the page meta description                                                                                                                                                        |
 | `canonical`                        | string                  | Set the page canonical url                                                                                                                                                           |
 | `mobileAlternate.media`            | string                  | Set what screen size the mobile website should be served from                                                                                                                        |
 | `mobileAlternate.href`             | string                  | Set the mobile page alternate url                                                                                                                                                    |
 | `languageAlternates`               | array                   | Set the language of the alternate urls. Expects array of objects with the shape: `{ hrefLang: string, href: string }`                                                                |
 | `additionalMetaTags`               | array                   | Allows you to add a meta tag that is not documented here. [More Info](#additional-meta-tags)                                                                                         |
+| `additionalLinkTags`               | array                   | Allows you to add a link tag that is not documented here. [More Info](#additional-link-tags)                                                                                         |
 | `twitter.cardType`                 | string                  | The card type, which will be one of `summary`, `summary_large_image`, `app`, or `player`                                                                                             |
 | `twitter.site`                     | string                  | @username for the website used in the card footer                                                                                                                                    |
 | `twitter.handle`                   | string                  | @username for the content creator / author (outputs as `twitter:creator`)                                                                                                            |
@@ -349,7 +354,7 @@ The only way to unset this, is by removing the prop from the `DefaultSeo` in you
 
 Setting this to `true` will set `index,nofollow` (to set `noindex`, please refer to [`noindex`](#noIndex)). This works on a page by page basis. This property works in tandem with the `noindex` property and together they populate the `robots` and `googlebot` meta tags.
 
-**Note:** The `noindex` and the [`nofollow`](#noFollow) properties are a little different than all the others in the sense that setting them as a default does not work as expected. This is due to the fact Next SEO already has a default of `index,follow` because `next-seo` is a SEO plugin after all. So if you want to globally these properties, please see [dangerouslySetAllPagesToNoIndex](#dangerouslySetAllPagesToNoIndex) and [dangerouslySetAllPagesToNoFollow](#dangerouslySetAllPagesToNoFollow).
+**Note:** Unlike for the other properties, setting `noindex` and [`nofollow`](#noFollow) by default does not work as expected. This is because Next SEO has a default of `index,follow`, since `next-seo` is an SEO plugin after all. If you want to globally allow these properties, see [dangerouslySetAllPagesToNoIndex](#dangerouslySetAllPagesToNoIndex) and [dangerouslySetAllPagesToNoFollow](#dangerouslySetAllPagesToNoFollow).
 
 **Example No Follow on a single page:**
 
@@ -540,6 +545,44 @@ it will result in this being rendered:
 
 ```html
 <meta property="dc:creator" content="Jane Doe" />,
+```
+
+#### Additional Link Tags
+
+This allows you to add any other link tags that are not covered in the `config`.
+
+`rel` and `href` is required.
+
+Example:
+
+```js
+additionalLinkTags={[
+  {
+    rel: 'icon',
+    href: 'https://www.test.ie/favicon.ico',
+  },
+  {
+    rel: 'apple-touch-icon',
+    href: 'https://www.test.ie/touch-icon-ipad.jpg',
+    sizes: '76x76'
+  },
+  {
+    rel: 'manifest',
+    href: '/manifest.json'
+  }
+]}
+```
+
+it will result in this being rendered:
+
+```html
+<link rel="icon" href="https://www.test.ie/favicon.ico" />
+<link
+  rel="apple-touch-icon"
+  href="https://www.test.ie/touch-icon-ipad.jpg"
+  sizes="76x76"
+/>
+<link rel="manifest" href="/manifest.json" />
 ```
 
 ## Open Graph
@@ -1067,8 +1110,7 @@ const Page = () => (
       instructions={[
         {
           name: 'Preheat',
-          text:
-            'Preheat the oven to 350 degrees F. Grease and flour a 9x9 inch pan.',
+          text: 'Preheat the oven to 350 degrees F. Grease and flour a 9x9 inch pan.',
           url: 'https://example.com/party-coffee-cake#step1',
           image: 'https://example.com/photos/party-coffee-cake/step1.jpg',
         },
@@ -1370,14 +1412,14 @@ export default Page;
 **Supported properties**
 
 | Property                        | Info                                                                                                                                                        |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
 | `applicantLocationRequirements` | The geographic location(s) in which employees may be located for to be eligible for the remote job                                                          |
 | `baseSalary`                    |                                                                                                                                                             |
 | `baseSalary.currency`           | The currency in which the monetary amount is expressed                                                                                                      |
 | `baseSalary.value`              | The value of the quantitative value. You can also provide an array of minimum and maximum salaries. .                                                       |
 | `baseSalary.unitText`           | A string indicating the unit of measurement [Base salary guideline](https://developers.google.com/search/docs/data-types/job-posting#basesalary)            |
 | `employmentType`                | Type of employment [Employement type guideline](https://developers.google.com/search/docs/data-types/job-posting#basesalary)                                |
-| `jobLocation`                   | The physical location(s) of the business where the employee will report to work (such as an office or worksite), not the location where the job was posted. |  |
+| `jobLocation`                   | The physical location(s) of the business where the employee will report to work (such as an office or worksite), not the location where the job was posted. |     |
 | `jobLocation.streetAddress`     | The street address. For example, 1600 Amphitheatre Pkwy                                                                                                     |
 | `jobLocation.addressLocality`   | The locality. For example, Mountain View.                                                                                                                   |
 | `jobLocation.addressRegion`     | The region. For example, CA.                                                                                                                                |
@@ -1442,6 +1484,81 @@ Local business is supported with a sub-set of properties.
       validThrough: '2020-04-02',
     },
   ]}
+  rating={{
+    ratingValue: '4.5',
+    ratingCount: '2',
+  }}
+  review={[
+    {
+      author: 'John Doe',
+      datePublished: '2006-05-04',
+      name: 'A masterpiece of literature',
+      reviewBody:
+        'I really enjoyed this book. It captures the essential challenge people face as they try make sense of their lives and grow to adulthood.',
+      reviewRating: {
+        bestRating: '5',
+        worstRating: '1',
+        reviewAspect: 'Ambiance',
+        ratingValue: '4',
+      },
+    },
+    {
+      author: 'Bob Smith',
+      datePublished: '2006-06-15',
+      name: 'A good read.',
+      reviewBody: "Catcher in the Rye is a fun book. It's a good book to read.",
+      reviewRating: {
+        ratingValue: '4',
+      },
+    },
+  ]}
+  makesOffer={[
+    {
+      priceSpecification: {
+        type: 'UnitPriceSpecification',
+        priceCurrency: 'EUR',
+        price: '1000-10000',
+      },
+      itemOffered: {
+        name: 'Motion Design Services',
+        description:
+          'We are the expert of animation and motion design productions.',
+      },
+    },
+    {
+      priceSpecification: {
+        type: 'UnitPriceSpecification',
+        priceCurrency: 'EUR',
+        price: '2000-10000',
+      },
+      itemOffered: {
+        name: 'Branding Services',
+        description:
+          'Real footage is a powerful tool when it comes to show what the business is about. Can be used to present your company, show your factory, promote a product packshot, or just tell any story. It can help create emotional links with your audience by showing punchy images.',
+      },
+    },
+  ]}
+  areaServed={[
+    {
+      geoMidpoint: {
+        latitude: '41.108237',
+        longitude: '-80.642982',
+      },
+      geoRadius: '1000',
+    },
+    {
+      geoMidpoint: {
+        latitude: '51.108237',
+        longitude: '-80.642982',
+      },
+      geoRadius: '1000',
+    },
+  ]}
+  action={{
+    actionName: 'potentialAction',
+    actionType: 'ReviewAction',
+    target: 'https://www.example.com/review/this/business',
+  }}
 />
 ```
 
@@ -1461,27 +1578,53 @@ Local business is supported with a sub-set of properties.
 
 **Supported properties**
 
-| Property                    | Info                                                                                                                                                 |
-| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `description`               | Description of the business location                                                                                                                 |
-| `geo`                       | Geographic coordinates of the business.                                                                                                              |
-| `geo.latitude`              | The latitude of the business location                                                                                                                |
-| `geo.longitude`             | The longitude of the business location                                                                                                               |
-| `rating`                    | The average rating of business based on multiple ratings or reviews.                                                                                 |
-| `rating.ratingValue`        | The rating for the content.                                                                                                                          |
-| `rating.ratingCount`        | The count of total number of ratings.                                                                                                                |
-| `priceRange`                | The relative price range of the business.                                                                                                            |
-| `servesCuisine`             | The type of cuisine the restaurant serves.                                                                                                           |
-| `images`                    | An image or images of the business. Required for valid markup depending on the type                                                                  |
-| `telephone`                 | A business phone number meant to be the primary contact method for customers.                                                                        |
-| `url`                       | The fully-qualified URL of the specific business location.                                                                                           |
-| `sameAs`                    | An array of URLs that represent this business                                                                                                        |
-| `openingHours`              | Opening hour specification of business. You can provide this as a single object, or an array of objects with the properties below.                   |
-| `openingHours.opens`        | The opening hour of the place or service on the given day(s) of the week.                                                                            |
-| `openingHours.closes`       | The closing hour of the place or service on the given day(s) of the week.                                                                            |
-| `openingHours.dayOfWeek`    | The day of the week for which these opening hours are valid. Can be a string or array of strings. Refer to [DayOfWeek](https://schema.org/DayOfWeek) |
-| `openingHours.validFrom`    | The date when the item becomes valid.                                                                                                                |
-| `openingHours.validThrough` | The date after when the item is not valid.                                                                                                           |
+| Property                                            | Info                                                                                                                                                 |
+| --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `description`                                       | Description of the business location                                                                                                                 |
+| `geo`                                               | Geographic coordinates of the business.                                                                                                              |
+| `geo.latitude`                                      | The latitude of the business location                                                                                                                |
+| `geo.longitude`                                     | The longitude of the business location                                                                                                               |
+| `rating`                                            | The average rating of business based on multiple ratings or reviews.                                                                                 |
+| `rating.ratingValue`                                | The rating for the content.                                                                                                                          |
+| `rating.ratingCount`                                | The count of total number of ratings.                                                                                                                |
+| `priceRange`                                        | The relative price range of the business.                                                                                                            |
+| `servesCuisine`                                     | The type of cuisine the restaurant serves.                                                                                                           |
+| `images`                                            | An image or images of the business. Required for valid markup depending on the type                                                                  |
+| `telephone`                                         | A business phone number meant to be the primary contact method for customers.                                                                        |
+| `url`                                               | The fully-qualified URL of the specific business location.                                                                                           |
+| `sameAs`                                            | An array of URLs that represent this business                                                                                                        |
+| `openingHours`                                      | Opening hour specification of business. You can provide this as a single object, or an array of objects with the properties below.                   |
+| `openingHours.opens`                                | The opening hour of the place or service on the given day(s) of the week.                                                                            |
+| `openingHours.closes`                               | The closing hour of the place or service on the given day(s) of the week.                                                                            |
+| `openingHours.dayOfWeek`                            | The day of the week for which these opening hours are valid. Can be a string or array of strings. Refer to [DayOfWeek](https://schema.org/DayOfWeek) |
+| `openingHours.validFrom`                            | The date when the item becomes valid.                                                                                                                |
+| `openingHours.validThrough`                         | The date after when the item is not valid.                                                                                                           |
+| `review`                                            | A review of the local business.                                                                                                                      |
+| `review.author`                                     | The author of this content or rating.                                                                                                                |
+| `review.reviewBody`                                 | The actual body of the review.                                                                                                                       |
+| `review.datePublished`                              | Date of first broadcast/publication.                                                                                                                 |
+| `review.name`                                       | The name of the item.                                                                                                                                |
+| `review.rating`                                     | The rating given in this review                                                                                                                      |
+| `review.rating.ratingValue`                         | The rating for the content.                                                                                                                          |
+| `review.rating.reviewAspect`                        | This Review or Rating is relevant to this part or facet of the itemReviewed.                                                                         |
+| `review.rating.worstRating`                         | The lowest value allowed in this rating system. If worstRating is omitted, 1 is assumed.                                                             |
+| `review.rating.bestRating`                          | The highest value allowed in this rating system. If bestRating is omitted, 5 is assumed                                                              |
+| `areasServed`                                       | The geographic area where a service or offered item is provided.                                                                                     |
+| `areasServed.GeoCircle`                             | A GeoCircle is a GeoShape representing a circular geographic area.                                                                                   |
+| `areasServed.GeoCircle.geoMidpoint`                 | Indicates the GeoCoordinates at the centre of a GeoShape e.g. GeoCircle.                                                                             |
+| `areasServed.GeoCircle.geoMidpoint.latitude`        | The latitude of a location. For example 37.42242                                                                                                     |
+| `areasServed.GeoCircle.geoMidpoint.longitude`       | The name of the item.                                                                                                                                |
+| `areasServed.GeoCircle.geoRadius`                   | Indicates the approximate radius of a GeoCircle (metres unless indicated otherwise via Distance notation).                                           |
+| `makesOffer`                                        | A pointer to products or services offered by the organization or person.                                                                             |
+| `makesOffer.offer`                                  | An offer to transfer some rights to an item or to provide a service                                                                                  |
+| `makesOffer.offer.priceSpecification`               | One or more detailed price specifications, indicating the unit price and delivery or payment charges.                                                |
+| `makesOffer.offer.priceSpecification.priceCurrency` | The currency of the price, or a price component when attached to PriceSpecification and its subtypes.                                                |
+| `makesOffer.offer.priceSpecification.price`         | The offer price of a product, or of a price component when attached to PriceSpecification and its subtypes.                                          |
+| `makesOffer.offer.itemOffered`                      | An item being offered (or demanded)                                                                                                                  |
+| `makesOffer.offer.itemOffered.name`                 | The name of the item                                                                                                                                 |
+| `makesOffer.offer.itemOffered.description`          | The description of the item.                                                                                                                         |
+| `action`                                            | An action performed by a direct agent and indirect participants upon a direct object.                                                                |
+| `action.target`                                     | Indicates a target EntryPoint for an Action.                                                                                                         |
 
 **NOTE:**
 
@@ -1527,6 +1670,16 @@ const Page = () => (
       ]}
       description="Sleeker than ACME's Classic Anvil, the Executive Anvil is perfect for the business traveler looking for something to drop from a height."
       brand="ACME"
+      color="blue"
+      manufacturerName="Gary Meehan"
+      manufacturerLogo="https://www.example.com/photos/logo.jpg"
+      material="steel"
+      slogan="For the business traveller looking for something to drop from a height."
+      disambiguatingDescription="Executive Anvil, perfect for the business traveller."
+      releaseDate="2014-02-05T08:00:00+08:00"
+      productionDate="2015-02-05T08:00:00+08:00"
+      purchaseDate="2015-02-06T08:00:00+08:00"
+      award="Best Executive Anvil Award."
       reviews={[
         {
           author: {
@@ -1617,10 +1770,11 @@ The property `aggregateOffer` is also available:
 
 **Recommended properties**
 
-| Property     | Info                                                                    |
-| ------------ | ----------------------------------------------------------------------- |
-| `highPrice`  | The highest price of all offers available. Use a floating point number. |
-| `offerCount` | The number of offers for the product.                                   |
+| Property     | Info                                                                                                                                                            |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `highPrice`  | The highest price of all offers available. Use a floating point number.                                                                                         |
+| `offerCount` | The number of offers for the product.                                                                                                                           |
+| `offers`     | An offer to transfer some rights to an item or to provide a service. You can provide this as a single object, or an array of objects with the properties below. |
 
 More info on the product data type can be found [here](https://developers.google.com/search/docs/data-types/product).
 
@@ -1766,6 +1920,95 @@ export default Page;
 | `publication`          | If your video is happening live and you want to be eligible for the LIVE badge.          |
 | `regionsAllowed`       | The regions where the video is allowed.                                                  |
 
+### VideoGame
+
+```jsx
+import { VideoGameJsonLd } from 'next-seo';
+
+const Page = () => (
+  <>
+    <h1>VideoGame JSON-LD</h1>
+    <VideoGameJsonLd
+      name="Red Dead Redemption 2"
+      translatorName={['Translator 1', 'Translator 2']}
+      languageName={['English', 'Kurdish']}
+      description="Arthur Morgan and the Van der Linde gang are outlaws on the run. With federal agents and the best bounty hunters in the nation massing on their heels, the gang must rob, steal and fight their way across the rugged heartland of America in order to survive."
+      processorRequirements="4 GHz"
+      memoryRequirements="16 Gb"
+      playMode="SinglePlayer"
+      applicationCategory="Game"
+      url="https://example.com/rdr2-game"
+      platformName={['PC game', 'PlayStation 4']}
+      operatingSystemName="windows"
+      keywords="outlaw, gang, federal agents"
+      datePublished="2019-02-05T08:00:00+08:00"
+      image="https://example.com/photos/1x1/photo.jpg"
+      publisherName="Vertical Games"
+      producerName="Rockstar Games"
+      producerUrl="https//www.example.com/producer"
+      offers={[
+        {
+          price: '119.99',
+          priceCurrency: 'USD',
+          priceValidUntil: '2020-11-05',
+          availability: 'https://schema.org/InStock',
+          url: 'https://example.net/rdr2-game',
+          seller: {
+            name: 'Executive Gaming',
+          },
+        },
+        {
+          price: '139.99',
+          priceCurrency: 'CAD',
+          priceValidUntil: '2020-09-05',
+          availability: 'https://schema.org/InStock',
+          url: 'https://example.org/rdr2-game',
+          seller: {
+            name: 'Executive Gaming',
+          },
+        },
+      ]}
+      aggregateRating={{
+        ratingValue: '44',
+        reviewCount: '89',
+        ratingCount: '684',
+        bestRating: '100',
+      }}
+      reviews={[
+        {
+          author: {
+            type: 'Person',
+            name: 'AhmetKaya',
+          },
+          publisher: {
+            type: 'Organization',
+            name: 'Gam Production',
+          },
+          datePublished: '2017-01-06T03:37:40Z',
+          reviewBody: 'Iki gozum.',
+          name: 'Rica ederim.',
+          reviewRating: {
+            bestRating: '5',
+            ratingValue: '5',
+            worstRating: '1',
+          },
+        },
+      ]}
+    />
+  </>
+);
+
+export default Page;
+```
+
+**Required properties**
+
+| Property | Info                         |
+| -------- | ---------------------------- |
+| `name`   | The title of the video game. |
+
+[More information about the schema](https://schema.org/VideoGame)
+
 ### Event
 
 ```jsx
@@ -1902,8 +2145,7 @@ const Page = () => (
     <QAPageJsonld
       mainEntity={{
         name: 'How many ounces are there in a pound?',
-        text:
-          'I have taken up a new interest in baking and keep running across directions in ounces and pounds. I have to translate between them and was wondering how many ounces are in a pound?',
+        text: 'I have taken up a new interest in baking and keep running across directions in ounces and pounds. I have to translate between them and was wondering how many ounces are in a pound?',
         answerCount: 3,
         upvotedCount: 26,
         dateCreated: '2016-07-23T21:11Z',
@@ -1921,8 +2163,7 @@ const Page = () => (
         },
         suggestedAnswer: [
           {
-            text:
-              'Are you looking for ounces or fluid ounces? If you are looking for fluid ounces there are 15.34 fluid ounces in a pound of water.',
+            text: 'Are you looking for ounces or fluid ounces? If you are looking for fluid ounces there are 15.34 fluid ounces in a pound of water.',
             dateCreated: '2016-11-02T21:11Z',
             upvotedCount: 42,
             url: 'https://example.com/question1#suggestedAnswer1',
@@ -1987,6 +2228,122 @@ export default Page;
 | `url`         | A URL that links directly to this answer.                                 |
 
 For reference and more info check [Google's Search Q&A DataType](https://developers.google.com/search/docs/data-types/qapage)
+
+### Collection Page
+
+Collection pages are web pages. Every web page is implicitly assumed to be declared to be of type WebPage, so the various properties about that webpage, such as breadcrumb may be used. We recommend explicit declaration if these properties are specified, but if they are found outside of an itemscope, they will be assumed to be about the page.
+
+```jsx
+import { CollectionPageJsonLd } from 'next-seo';
+
+const Page = () => (
+  <>
+    <h1>Collection Page JSON-LD</h1>
+    <CollectionPageJsonLd
+      name="Resistance 3: Fall of Man"
+      hasPart={[
+        {
+          about:
+            'Britten Four Sea Interludes and Passacaglia from Peter Grimes',
+          author: 'John Doe',
+          name: 'Schema.org Ontology',
+          datePublished: '2021-03-09',
+          audience: 'Internet',
+          keywords: 'schema',
+          thumbnailUrl: 'https://i.ytimg.com/vi/eXSJ3PO9Tas/hqdefault.jpg',
+          image: 'hqdefault.jpg',
+        },
+        {
+          about: 'Shostakovich Symphony No. 7 (Leningrad)',
+          author: 'John Smith',
+          name: 'Creative work name',
+          datePublished: '2014-10-01T19:30',
+        },
+      ]}
+    />
+  </>
+);
+
+export default Page;
+```
+
+**Required properties**
+
+| Property  | Info                                                                                          |
+| --------- | --------------------------------------------------------------------------------------------- |
+| `name`    | The name of the item.                                                                         |
+| `hasPart` | Indicates an item or CreativeWork that is part of this item, or CreativeWork (in some sense). |
+
+**Supported properties**
+
+| Property               | Info                                                                                                                                    |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `hasPart.creativeWork` | The most generic kind of [creative work](https://schema.org/CreativeWork), including books, movies, photographs, software programs, etc |
+
+**`creativeWork` Required properties**
+
+| Property                             | Info                                                                                                                                                                                                                        |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `hasPart.creativeWork.author`        | The author of this content or rating. Please note that author is special in that HTML 5 provides a special mechanism for indicating authorship via the rel tag. That is equivalent to this and may be used interchangeably. |
+| `hasPart.creativeWork.about`         | The subject matter of the content.                                                                                                                                                                                          |
+| `hasPart.creativeWork.datePublished` | Date of first broadcast/publication.                                                                                                                                                                                        |
+| `hasPart.creativeWork.name`          | The name of the item.                                                                                                                                                                                                       |
+
+**`creativeWork` Supported properties**
+
+| Property                            | Info                                                                                                                   |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `hasPart.creativeWork.audience`     | An intended audience, i.e. a group for whom something was created.                                                     |
+| `hasPart.creativeWork.keywords`     | Keywords or tags used to describe this content. Multiple entries in a keywords list are typically delimited by commas. |
+| `hasPart.creativeWork.thumbnailUrl` | A thumbnail image relevant to the Thing.                                                                               |
+| `hasPart.creativeWork.image`        | An image of the item. This can be a URL or a fully described ImageObject.                                              |
+
+For reference and more info check [Collection Page DataType](https://schema.org/CollectionPage)
+
+### Profile page
+
+Profile pages are web pages. Every web page is implicitly assumed to be declared to be of type WebPage, so the various properties about that webpage, such as breadcrumb may be used. We recommend explicit declaration if these properties are specified, but if they are found outside of an itemscope, they will be assumed to be about the page.
+
+```jsx
+import { ProfilePageJsonLd } from 'next-seo';
+
+const Page = () => (
+  <>
+    <h1>Profile page JSON-LD</h1>
+    <ProfilePageJsonLd
+      lastReviewed="2014-10-01T19:30"
+      breadcrumb={[
+        {
+          position: 1,
+          name: 'Books',
+          item: 'https://example.com/books',
+        },
+        {
+          position: 2,
+          name: 'Authors',
+          item: 'https://example.com/books/authors',
+        },
+      ]}
+    />
+  </>
+);
+
+export default Page;
+```
+
+**Required properties**
+
+| Property     | Info                                                                                                                                    |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `breadcrumb` | A set of links that can help a user understand and navigate a website hierarchy represented as string or [BreadcrumbList](#breadcrumb). |
+
+**Supported properties**
+
+| Property       | Info                                                                                           |
+| -------------- | ---------------------------------------------------------------------------------------------- |
+| `lastReviewed` | Date on which the content on this web page was last reviewed for accuracy and/or completeness. |
+
+For reference and more info check [Profile Page DataType](https://schema.org/ProfilePage)
 
 ### Carousel
 
@@ -2183,15 +2540,13 @@ export default () => (
           instructions: [
             {
               name: 'Preheat',
-              text:
-                'Preheat the oven to 350 degrees F. Grease and flour a 9x9 inch pan.',
+              text: 'Preheat the oven to 350 degrees F. Grease and flour a 9x9 inch pan.',
               url: 'https://example.com/party-coffee-cake#step1',
               image: 'https://example.com/photos/party-coffee-cake/step1.jpg',
             },
             {
               name: 'Mix dry ingredients',
-              text:
-                'In a large bowl, combine flour, sugar, baking powder, and salt.',
+              text: 'In a large bowl, combine flour, sugar, baking powder, and salt.',
               url: 'https://example.com/party-coffee-cake#step2',
               image: 'https://example.com/photos/party-coffee-cake/step2.jpg',
             },
@@ -2258,15 +2613,13 @@ export default () => (
           instructions: [
             {
               name: 'Preheat',
-              text:
-                'Preheat the oven to 350 degrees F. Grease and flour a 9x9 inch pan.',
+              text: 'Preheat the oven to 350 degrees F. Grease and flour a 9x9 inch pan.',
               url: 'https://example.com/party-coffee-cake#step1',
               image: 'https://example.com/photos/party-coffee-cake/step1.jpg',
             },
             {
               name: 'Mix dry ingredients',
-              text:
-                'In a large bowl, combine flour, sugar, baking powder, and salt.',
+              text: 'In a large bowl, combine flour, sugar, baking powder, and salt.',
               url: 'https://example.com/party-coffee-cake#step2',
               image: 'https://example.com/photos/party-coffee-cake/step2.jpg',
             },
@@ -2354,10 +2707,11 @@ export default () => (
 
 **Data Recommended properties**
 
-| Property              | Info                             |
-| --------------------- | -------------------------------- |
-| `operatingSystem`     | The directors of the movie.      |
-| `applicationCategory` | The date the movie was released. |
+| Property              | Info                              |
+| --------------------- | --------------------------------- |
+| `operatingSystem`     | The operating System suuported    |
+|                       | By the game it self.              |
+| `applicationCategory` | Desktop Software or Video Game... |
 
 For reference and more info check [Google docs for Software App](https://developers.google.com/search/docs/data-types/software-app)
 
@@ -2425,6 +2779,18 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/Roohn"><img src="https://avatars.githubusercontent.com/u/22071649?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ronald</b></sub></a><br /><a href="https://github.com/garmeeh/next-seo/commits?author=Roohn" title="Documentation">📖</a> <a href="https://github.com/garmeeh/next-seo/commits?author=Roohn" title="Code">💻</a> <a href="https://github.com/garmeeh/next-seo/commits?author=Roohn" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/MrNossiom"><img src="https://avatars.githubusercontent.com/u/43814157?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Milo Moisson</b></sub></a><br /><a href="https://github.com/garmeeh/next-seo/commits?author=MrNossiom" title="Code">💻</a> <a href="https://github.com/garmeeh/next-seo/commits?author=MrNossiom" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/adrianu197"><img src="https://avatars.githubusercontent.com/u/33718513?v=4?s=100" width="100px;" alt=""/><br /><sub><b>adrianu197</b></sub></a><br /><a href="https://github.com/garmeeh/next-seo/commits?author=adrianu197" title="Code">💻</a> <a href="https://github.com/garmeeh/next-seo/commits?author=adrianu197" title="Documentation">📖</a> <a href="https://github.com/garmeeh/next-seo/commits?author=adrianu197" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/kaykdm"><img src="https://avatars.githubusercontent.com/u/34934746?v=4?s=100" width="100px;" alt=""/><br /><sub><b>kaykdm</b></sub></a><br /><a href="https://github.com/garmeeh/next-seo/commits?author=kaykdm" title="Code">💻</a> <a href="https://github.com/garmeeh/next-seo/commits?author=kaykdm" title="Documentation">📖</a> <a href="https://github.com/garmeeh/next-seo/commits?author=kaykdm" title="Tests">⚠️</a></td>
+    <td align="center"><a href="http://www.apolexian.xyz"><img src="https://avatars.githubusercontent.com/u/20223409?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ivan Nikitin</b></sub></a><br /><a href="https://github.com/garmeeh/next-seo/commits?author=Apolexian" title="Documentation">📖</a> <a href="https://github.com/garmeeh/next-seo/commits?author=Apolexian" title="Code">💻</a> <a href="https://github.com/garmeeh/next-seo/commits?author=Apolexian" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/hsynlms"><img src="https://avatars.githubusercontent.com/u/1780171?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Huseyin ELMAS</b></sub></a><br /><a href="https://github.com/garmeeh/next-seo/commits?author=hsynlms" title="Code">💻</a> <a href="https://github.com/garmeeh/next-seo/commits?author=hsynlms" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://aryanbeezadhur.com"><img src="https://avatars.githubusercontent.com/u/34424160?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Aryan Beezadhur</b></sub></a><br /><a href="https://github.com/garmeeh/next-seo/commits?author=AryanBeezadhur" title="Documentation">📖</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/TomPradat"><img src="https://avatars.githubusercontent.com/u/16164512?v=4?s=100" width="100px;" alt=""/><br /><sub><b>TomPradat</b></sub></a><br /><a href="https://github.com/garmeeh/next-seo/commits?author=TomPradat" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/PezeM"><img src="https://avatars.githubusercontent.com/u/16854655?v=4?s=100" width="100px;" alt=""/><br /><sub><b>PezeM</b></sub></a><br /><a href="https://github.com/garmeeh/next-seo/commits?author=PezeM" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/darklight147"><img src="https://avatars.githubusercontent.com/u/39389636?v=4?s=100" width="100px;" alt=""/><br /><sub><b>darklight147</b></sub></a><br /><a href="https://github.com/garmeeh/next-seo/commits?author=darklight147" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://shabith.com"><img src="https://avatars.githubusercontent.com/u/143546?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Shabith Ishan Thennakone</b></sub></a><br /><a href="https://github.com/garmeeh/next-seo/commits?author=shabith" title="Documentation">📖</a></td>
   </tr>
 </table>
 
