@@ -4,25 +4,13 @@ import Head from 'next/head';
 import markup from '../utils/markup';
 import formatAuthorName from '../utils/formatAuthorName';
 import buildVideo from '../utils/buildVideo';
+import { buildAggregateRating } from '../utils/buildAggregateRating';
 
-import { Video } from '../types';
+import { Video, AggregateRating } from '../types';
 import escapeJsonLd from '../utils/escapeJsonLd';
 
-export type AggregateRating = {
-  ratingValue: string;
-  ratingCount: string;
-};
-
-export const buildAggregateRating = (aggregateRating: AggregateRating) => `
-  "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "${aggregateRating.ratingValue}",
-      "ratingCount": "${aggregateRating.ratingCount}"
-    },
-`;
-
 type Instruction = {
-  name: string;
+  name?: string;
   text: string;
   url?: string;
   image?: string;
@@ -30,10 +18,10 @@ type Instruction = {
 
 export const buildInstruction = (instruction: Instruction) => `{
   "@type": "HowToStep",
-  "name": "${escapeJsonLd(instruction.name)}",
-  "text": "${escapeJsonLd(instruction.text)}",
-  "url": "${instruction.url}",
-  "image": "${instruction.image}"
+  ${instruction.name ? `"name": "${escapeJsonLd(instruction.name)}",` : ''}
+  ${instruction.image ? `"image": "${instruction.image}",` : ''}
+  ${instruction.url ? `"url": "${instruction.url}",` : ''}
+  "text": "${escapeJsonLd(instruction.text)}"
 }`;
 
 export interface RecipeJsonLdProps {

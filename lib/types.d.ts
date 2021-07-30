@@ -9,6 +9,8 @@ export interface OpenGraphVideos {
   width?: number;
   height?: number;
   alt?: string;
+  type?: string;
+  secureUrl?: string;
 }
 export interface Address {
   streetAddress: string;
@@ -69,6 +71,7 @@ export declare type AggregateOffer = {
   lowPrice: string;
   highPrice?: string;
   offerCount?: string;
+  offers?: Offers | Offers[];
 };
 export interface OpenGraphVideoActors {
   profile: string;
@@ -132,8 +135,17 @@ interface LanguageAlternate {
   hrefLang: string;
   href: string;
 }
+interface LinkTag {
+  rel: string;
+  href: string;
+  sizes?: string;
+  type?: string;
+  color?: string;
+  keyOverride?: string;
+}
 export interface BaseMetaTag {
   content: string;
+  keyOverride?: string;
 }
 export interface HTML5MetaTag extends BaseMetaTag {
   name: string;
@@ -157,6 +169,57 @@ export interface HTTPEquivMetaTag extends BaseMetaTag {
 }
 export declare type MetaTag = HTML5MetaTag | RDFaMetaTag | HTTPEquivMetaTag;
 export declare type ImagePrevSize = 'none' | 'standard' | 'large';
+export declare type AggregateRating = {
+  ratingValue: string;
+  reviewCount?: string;
+  ratingCount?: string;
+  bestRating?: string;
+};
+export declare type GamePlayMode = 'CoOp' | 'MultiPlayer' | 'SinglePlayer';
+export declare type Review = {
+  author: Author;
+  datePublished?: string;
+  reviewBody?: string;
+  name?: string;
+  publisher?: Publisher;
+  reviewRating: ReviewRating;
+};
+export declare type ReviewRating = {
+  bestRating?: string;
+  ratingValue: string;
+  worstRating?: string;
+};
+export declare type Author = {
+  type: string;
+  name: string;
+};
+export declare type Publisher = {
+  type: string;
+  name: string;
+};
+export declare type ApplicationCategory =
+  | 'Game'
+  | 'SocialNetworking'
+  | 'Travel'
+  | 'Shopping'
+  | 'Sports'
+  | 'Lifestyle'
+  | 'Business'
+  | 'Design'
+  | 'Developer'
+  | 'Driver'
+  | 'Educational'
+  | 'Health'
+  | 'Finance'
+  | 'Security'
+  | 'Browser'
+  | 'Communication'
+  | 'DesktopEnhancement'
+  | 'Entertainment'
+  | 'Multimedia'
+  | 'Home'
+  | 'Utilities'
+  | 'Reference';
 export interface AdditionalRobotsProps {
   nosnippet?: boolean;
   maxSnippet?: number;
@@ -184,6 +247,7 @@ export interface NextSeoProps {
   };
   twitter?: Twitter;
   additionalMetaTags?: ReadonlyArray<MetaTag>;
+  additionalLinkTags?: ReadonlyArray<LinkTag>;
 }
 export interface DefaultSeoProps extends NextSeoProps {
   dangerouslySetAllPagesToNoIndex?: boolean;

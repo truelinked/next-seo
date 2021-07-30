@@ -444,6 +444,104 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "MrNossiom",
+      "name": "Milo Moisson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43814157?v=4",
+      "profile": "https://github.com/MrNossiom",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "adrianu197",
+      "name": "adrianu197",
+      "avatar_url": "https://avatars.githubusercontent.com/u/33718513?v=4",
+      "profile": "https://github.com/adrianu197",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
+    },
+    {
+      "login": "kaykdm",
+      "name": "kaykdm",
+      "avatar_url": "https://avatars.githubusercontent.com/u/34934746?v=4",
+      "profile": "https://github.com/kaykdm",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
+    },
+    {
+      "login": "Apolexian",
+      "name": "Ivan Nikitin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20223409?v=4",
+      "profile": "http://www.apolexian.xyz",
+      "contributions": [
+        "doc",
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "hsynlms",
+      "name": "Huseyin ELMAS",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1780171?v=4",
+      "profile": "https://github.com/hsynlms",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "AryanBeezadhur",
+      "name": "Aryan Beezadhur",
+      "avatar_url": "https://avatars.githubusercontent.com/u/34424160?v=4",
+      "profile": "https://aryanbeezadhur.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "TomPradat",
+      "name": "TomPradat",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16164512?v=4",
+      "profile": "https://github.com/TomPradat",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "PezeM",
+      "name": "PezeM",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16854655?v=4",
+      "profile": "https://github.com/PezeM",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "darklight147",
+      "name": "darklight147",
+      "avatar_url": "https://avatars.githubusercontent.com/u/39389636?v=4",
+      "profile": "https://github.com/darklight147",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "shabith",
+      "name": "Shabith Ishan Thennakone",
+      "avatar_url": "https://avatars.githubusercontent.com/u/143546?v=4",
+      "profile": "https://shabith.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,

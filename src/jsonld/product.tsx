@@ -3,40 +3,13 @@ import Head from 'next/head';
 
 import markup from '../utils/markup';
 import formatIfArray from '../utils/formatIfArray';
-import { AggregateOffer, Offers } from '../types';
 import { buildOffers } from '../utils/buildOffers';
 import { buildAggregateOffer } from '../utils/buildAggregateOffer';
+import { buildAggregateRating } from '../utils/buildAggregateRating';
+import { buildReviews } from '../utils/buildReviews';
+
+import { AggregateOffer, Offers, AggregateRating, Review } from '../types';
 import escapeJsonLd from '../utils/escapeJsonLd';
-
-export type ReviewRating = {
-  bestRating?: string;
-  ratingValue: string;
-  worstRating?: string;
-};
-
-export type Author = {
-  type: string;
-  name: string;
-};
-
-export type Publisher = {
-  type: string;
-  name: string;
-};
-
-export type Review = {
-  author: Author;
-  datePublished?: string;
-  reviewBody?: string;
-  name?: string;
-  publisher?: Publisher;
-  reviewRating: ReviewRating;
-};
-
-export type AggregateRating = {
-  ratingValue: string;
-  reviewCount: string;
-};
 
 export interface ProductJsonLdProps {
   keyOverride?: string;
@@ -53,6 +26,16 @@ export interface ProductJsonLdProps {
   gtin13?: string;
   gtin14?: string;
   mpn?: string;
+  color?: string;
+  manufacturerName?: string;
+  manufacturerLogo?: string;
+  material?: string | ProductJsonLdProps;
+  slogan?: string;
+  disambiguatingDescription?: string;
+  productionDate?: string;
+  purchaseDate?: string;
+  releaseDate?: string;
+  award?: string;
 }
 
 const buildBrand = (brand: string) => `
@@ -62,55 +45,6 @@ const buildBrand = (brand: string) => `
     },
 `;
 
-export const buildReviewRating = (rating: ReviewRating) =>
-  rating
-    ? `"reviewRating": {
-          "@type": "Rating",
-          ${rating.bestRating ? `"bestRating": "${rating.bestRating}",` : ''}
-          ${rating.worstRating ? `"worstRating": "${rating.worstRating}",` : ''}
-          "ratingValue": "${rating.ratingValue}"
-        }`
-    : '';
-
-export const buildAuthor = (author: Author) => `
-  "author": {
-      "@type": "${author.type}",
-      "name": "${escapeJsonLd(author.name)}"
-  },
-`;
-
-export const buildPublisher = (publisher: Publisher) => `
-  "publisher": {
-      "@type": "${publisher.type}",
-      "name": "${escapeJsonLd(publisher.name)}"
-  },
-`;
-
-export const buildReviews = (reviews: Review[]) => `
-"review": [
-  ${reviews.map(
-    review => `{
-      "@type": "Review",
-      ${review.author ? buildAuthor(review.author) : ''}
-      ${review.publisher ? buildPublisher(review.publisher) : ''}
-      ${
-        review.datePublished
-          ? `"datePublished": "${review.datePublished}",`
-          : ''
-      }
-      ${review.reviewBody ? `"reviewBody": "${review.reviewBody}",` : ''}
-      ${review.name ? `"name": "${review.name}",` : ''}
-      ${buildReviewRating(review.reviewRating)}
-  }`,
-  )}],`;
-
-export const buildAggregateRating = (aggregateRating: AggregateRating) => `
-  "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "${aggregateRating.ratingValue}",
-      "reviewCount": "${aggregateRating.reviewCount}"
-    },
-`;
 
 const ProductJsonLd: FC<ProductJsonLdProps> = ({
   keyOverride,
@@ -127,11 +61,21 @@ const ProductJsonLd: FC<ProductJsonLdProps> = ({
   aggregateRating,
   offers,
   aggregateOffer,
+  color,
+  manufacturerName,
+  manufacturerLogo,
+  material,
+  slogan,
+  disambiguatingDescription,
+  productionDate,
+  releaseDate,
+  purchaseDate,
+  award,
 }) => {
   const jslonld = `{
     "@context": "https://schema.org/",
     "@type": "Product",
-    "image":${formatIfArray(images)},
+    ${images.length ? `"image":${formatIfArray(images)},` : ''}
     ${description ? `"description": "${escapeJsonLd(description)}",` : ''}
     ${mpn ? `"mpn": "${mpn}",` : ''}
     ${sku ? `"sku": "${sku}",` : ''}
@@ -141,6 +85,38 @@ const ProductJsonLd: FC<ProductJsonLdProps> = ({
     ${brand ? buildBrand(brand) : ''}
     ${reviews.length ? buildReviews(reviews) : ''}
     ${aggregateRating ? buildAggregateRating(aggregateRating) : ''}
+    ${color ? `"color": "${color}",` : ''}
+    ${material ? `"material": "${material}",` : ''}
+    ${slogan ? `"slogan": "${slogan}",` : ''}
+    ${
+      disambiguatingDescription
+        ? `"disambiguatingDescription": "${disambiguatingDescription}",`
+        : ''
+    }
+    ${productionDate ? `"productionDate": "${productionDate}",` : ''}
+    ${releaseDate ? `"releaseDate": "${releaseDate}",` : ''}
+    ${purchaseDate ? `"purchaseDate": "${purchaseDate}",` : ''}
+    ${award ? `"award": "${award}",` : ''}
+    ${
+      manufacturerName
+        ? `
+        "manufacturer": {
+          "@type": "Organization",
+          ${
+            manufacturerLogo
+              ? `
+              "logo": {
+                "@type": "ImageObject",
+                "url": "${manufacturerLogo}"
+              },
+              `
+              : ''
+          }
+          "name": "${manufacturerName}"
+        },
+        `
+        : ''
+    }
     ${
       offers
         ? `"offers": ${

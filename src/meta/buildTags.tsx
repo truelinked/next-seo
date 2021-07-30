@@ -1,6 +1,5 @@
 import React from 'react';
 import { BuildTagsParams } from '../types';
-
 const defaults = {
   templateTitle: '',
   noindex: false,
@@ -27,7 +26,7 @@ const buildTags = (config: BuildTagsParams) => {
   } else if (config.defaultTitle) {
     updatedTitle = config.defaultTitle;
   }
-  
+
   if (updatedTitle) {
     tagsToRender.push(<title key="title">{updatedTitle}</title>);
   }
@@ -620,6 +619,26 @@ const buildTags = (config: BuildTagsParams) => {
             />,
           );
         }
+
+        if (video.secureUrl) {
+          tagsToRender.push(
+            <meta
+              key={`og:video:secure_url${index}`}
+              property="og:video:secure_url"
+              content={video.secureUrl.toString()}
+            />,
+          );
+        }
+
+        if (video.type) {
+          tagsToRender.push(
+            <meta
+              key={`og:video:type${index}`}
+              property="og:video:type"
+              content={video.type.toString()}
+            />,
+          );
+        }
       });
     }
 
@@ -653,7 +672,20 @@ const buildTags = (config: BuildTagsParams) => {
   if (config.additionalMetaTags && config.additionalMetaTags.length > 0) {
     config.additionalMetaTags.forEach(tag => {
       tagsToRender.push(
-        <meta key={tag.name || tag.property || tag.httpEquiv} {...tag} />,
+        <meta
+          key={`meta:${
+            tag.keyOverride ?? tag.name ?? tag.property ?? tag.httpEquiv
+          }`}
+          {...tag}
+        />,
+      );
+    });
+  }
+
+  if (config.additionalLinkTags?.length) {
+    config.additionalLinkTags.forEach(tag => {
+      tagsToRender.push(
+        <link key={`link${tag.keyOverride ?? tag.href}${tag.rel}`} {...tag} />,
       );
     });
   }
