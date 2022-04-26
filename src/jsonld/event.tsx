@@ -18,6 +18,11 @@ type Location = {
 
 type Performer = {
   name: string;
+  role: string;
+};
+type Work = {
+  name: string;
+  role: string;
 };
 //Updated event for multiple instance and props
 export interface EventJsonLdProps {
@@ -37,6 +42,7 @@ export interface EventJsonLdProps {
   performers?: Performer | Performer[];
   composers?: Composer | Composer[];
   organizers?: Organizer | Organizer[];
+  works?: Work | Work[];
 }
 
 const buildLocation = (location: Location) => `
@@ -51,8 +57,27 @@ const buildLocation = (location: Location) => `
 
 const buildPerformer = (performer: Performer) => `
   {
-    "@type": "Person",
-    "name": "${performer.name}"
+    
+    "name": "${performer.name}",
+    "performer": {
+      "@type": "Person",
+      "name": "${performer.name}",
+    },
+    ${performer.role && `"@type":"PerformanceRole"`},
+    ${performer.role && `"roleName": ${performer.role}`}    
+
+  }
+`;
+
+const buildWorksPerformed = (work: Work) => `
+  {
+    
+    "@type":"CreativeWork",
+    "name": "${work.name}",
+    "creator":{
+       "@type":"Person",
+       "name":"${work.name}",
+    }
   }
 `;
 
@@ -88,6 +113,7 @@ const EventJsonLd: FC<EventJsonLdProps> = ({
   eventAttendanceMode,
   composers,
   organizers,
+  works,
 }) => {
   const jslonld = `{
     "@context": "https://schema.org",
@@ -117,6 +143,15 @@ const EventJsonLd: FC<EventJsonLdProps> = ({
     ${
       aggregateOffer && !offers
         ? `"offers": ${buildAggregateOffer(aggregateOffer)},`
+        : ''
+    }
+    ${
+      works
+        ? `"workPerformed": ${
+            Array.isArray(works)
+              ? `[${works.map(work => `${buildWorksPerformed(work)}`)}]`
+              : buildWorksPerformed(works)
+          },`
         : ''
     }
     ${
