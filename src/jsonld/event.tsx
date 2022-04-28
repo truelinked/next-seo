@@ -27,7 +27,7 @@ type Work = {
   type: string;
   name: string;
   role?: string;
-  creator?: object;
+  composer?: Composer;
 };
 //Updated event for multiple instance and props
 export interface EventJsonLdProps {
@@ -53,10 +53,10 @@ export interface EventJsonLdProps {
 const buildLocation = (location: Location) => `
   "location": {
     ${location.type ? `"@type": "${location.type}",` : ``}
+    ${location.name ? `"name": "${location.name}",` : ``}
     ${location.address ? `${buildAddress(location.address)},` : ``}   
-    ${location.url ? `"url": "${location.url}",` : ``}
     ${location.sameAs ? `"sameAs": "${location.sameAs}"` : ``}
-    ${location.name ? `"name": "${location.name}"` : ``}
+    ${location.url ? `"url": "${location.url}"` : ``}
   }
 `;
 
@@ -66,10 +66,10 @@ const buildPerformer = (performer: Performer) => `
     "name": "${performer.name}",
     "performer": {
       "@type": "Person",
-      "name": "${performer.name}",
+      "name": "${performer.name}"
     },
-    ${performer.role && `"@type":"PerformanceRole"`},
-    ${performer.role && `"roleName": ${performer.role}`}    
+    ${performer.role && `"@type":"PerformanceRole",`}
+    ${performer.role && `"roleName": "${performer.role}"`}    
 
   }
 `;
@@ -81,7 +81,7 @@ const buildWorksPerformed = (work: Work) => `
     "name": "${work.name}",
     "creator":{
        "@type":"Person",
-       "name":"${work.name}",
+       "name":"${work?.composer?.name}"
     }
   }
 `;
@@ -96,8 +96,7 @@ const buildComposer = (composer: Composer) => `
 const buildOrganization = (organizer: Organizer) => `
   {
     "@type": "Organization",
-    "name": "${organizer.name}",
-    ${organizer.url ? `"url": "${encodeURI(organizer.url)}"` : ``}
+    "name": "${organizer.name}"
   }
 `;
 
