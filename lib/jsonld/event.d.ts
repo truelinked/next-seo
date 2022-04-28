@@ -9,6 +9,11 @@ declare type Location = {
 };
 declare type Performer = {
   name: string;
+  role: string;
+};
+declare type Work = {
+  name: string;
+  role: string;
 };
 export interface EventJsonLdProps {
   keyOverride: string;
@@ -27,6 +32,7 @@ export interface EventJsonLdProps {
   performers?: Performer | Performer[];
   composers?: Composer | Composer[];
   organizers?: Organizer | Organizer[];
+  works?: Work | Work[];
 }
 declare const EventJsonLd: FC<EventJsonLdProps>;
 export default EventJsonLd;
