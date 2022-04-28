@@ -18,7 +18,7 @@ declare type Work = {
   type: string;
   name: string;
   role?: string;
-  creator?: object;
+  composer?: Composer;
 };
 export interface EventJsonLdProps {
   keyOverride: string;
