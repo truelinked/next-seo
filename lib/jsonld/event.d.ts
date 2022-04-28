@@ -8,12 +8,17 @@ declare type Location = {
   url?: string;
 };
 declare type Performer = {
+  type: string;
   name: string;
-  role: string;
+  roleName?: string;
+  role?: string;
+  performer: object;
 };
 declare type Work = {
+  type: string;
   name: string;
-  role: string;
+  role?: string;
+  creator?: object;
 };
 export interface EventJsonLdProps {
   keyOverride: string;

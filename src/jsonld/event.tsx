@@ -17,12 +17,17 @@ type Location = {
 };
 
 type Performer = {
+  type: string;
   name: string;
-  role: string;
+  roleName?: string;
+  role?: string;
+  performer: object;
 };
 type Work = {
+  type: string;
   name: string;
-  role: string;
+  role?: string;
+  creator?: object;
 };
 //Updated event for multiple instance and props
 export interface EventJsonLdProps {
