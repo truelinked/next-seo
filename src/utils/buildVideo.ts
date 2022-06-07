@@ -72,7 +72,7 @@ const buildInteractionStatistic = (watchCount: number) => `
 `;
 
 const buildBroadcastEvent = (publication: BroadcastEvent) => `
-  "publication": {
+  {
     "@type": "BroadcastEvent",
     "name": "${escapeJsonLd(publication.name)}",
     "isLiveBroadcast": ${publication.isLiveBroadcast},
