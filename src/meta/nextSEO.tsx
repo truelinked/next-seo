@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import buildTags from './buildTags';
 import { NextSeoProps } from '../types';
 
-export default class extends Component<NextSeoProps, {}> {
+export default class NextSeo extends Component<NextSeoProps, {}> {
   render() {
     const {
       title,
@@ -17,8 +17,10 @@ export default class extends Component<NextSeoProps, {}> {
       twitter,
       additionalMetaTags,
       titleTemplate,
+      defaultTitle,
       mobileAlternate,
       languageAlternates,
+      additionalLinkTags,
     } = this.props;
 
     return (
@@ -35,8 +37,10 @@ export default class extends Component<NextSeoProps, {}> {
           additionalMetaTags,
           twitter,
           titleTemplate,
+          defaultTitle,
           mobileAlternate,
           languageAlternates,
+          additionalLinkTags,
         })}
       </Head>
     );

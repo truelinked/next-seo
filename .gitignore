@@ -3,6 +3,7 @@ node_modules
 .next
 .history
 cypress/videos
+cypress/screenshots
 coverage
 package-lock.json
 notes.md

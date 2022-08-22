@@ -1,31 +1,26 @@
-import React, { FC } from 'react';
-import Head from 'next/head';
+import React from 'react';
 
-import markup from '../utils/markup';
-import formatIfArray from '../utils/formatIfArray';
-import buildAddress from '../utils/buildAddress';
-import { Address } from '../types';
+import { JsonLd, JsonLdProps } from './jsonld';
+import type {
+  Address,
+  Geo,
+  AggregateRating,
+  Review,
+  Action,
+  GeoCircle,
+  OpeningHoursSpecification,
+  Offer,
+} from 'src/types';
+import { setAddress } from 'src/utils/schema/setAddress';
+import { setReviews } from 'src/utils/schema/setReviews';
+import { setGeo } from 'src/utils/schema/setGeo';
+import { setAggregateRating } from 'src/utils/schema/setAggregateRating';
+import { setAction } from 'src/utils/schema/setAction';
+import { setGeoCircle } from 'src/utils/schema/setGeoCircle';
+import { setOffer } from 'src/utils/schema/setOffer';
+import { setOpeningHours } from 'src/utils/schema/setOpeningHours';
 
-type Geo = {
-  latitude: string;
-  longitude: string;
-};
-
-type Rating = {
-  ratingValue: string;
-  ratingCount: string;
-};
-
-type OpeningHoursSpecification = {
-  opens: string;
-  closes: string;
-  dayOfWeek: string | string[];
-  validFrom?: string;
-  validThrough?: string;
-};
-
-export interface LocalBusinessJsonLdProps {
-  keyOverride?: string;
+export interface LocalBusinessJsonLdProps extends JsonLdProps {
   type: string;
   id: string;
   name: string;
@@ -35,100 +30,54 @@ export interface LocalBusinessJsonLdProps {
   address: Address;
   geo?: Geo;
   images?: string[];
-  rating?: Rating;
+  rating?: AggregateRating;
+  review?: Review[];
   priceRange?: string;
   servesCuisine?: string | string[];
   sameAs?: string[];
   openingHours?: OpeningHoursSpecification | OpeningHoursSpecification[];
+  action?: Action;
+  areaServed?: GeoCircle[];
+  makesOffer?: Offer[];
 }
 
-const buildGeo = (geo: Geo) => `
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": "${geo.latitude}",
-    "longitude": "${geo.longitude}"
-  },
-`;
-
-const buildRating = (rating: Rating) => `
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "${rating.ratingValue}",
-    "ratingCount": "${rating.ratingCount}"
-  },
-`;
-
-const buildOpeningHours = (openingHours: OpeningHoursSpecification) => `
-  {
-    "@type": "OpeningHoursSpecification",
-    ${
-      openingHours.dayOfWeek
-        ? `"dayOfWeek": ${formatIfArray(openingHours.dayOfWeek)},`
-        : ''
-    }
-    "opens": "${openingHours.opens}",
-    ${openingHours.validFrom ? `"validFrom": "${openingHours.validFrom}",` : ''}
-    ${
-      openingHours.validThrough
-        ? `"validThrough": "${openingHours.validThrough}",`
-        : ''
-    }
-    "closes": "${openingHours.closes}"
-  }
-`;
-
-const LocalBusinessJsonLd: FC<LocalBusinessJsonLdProps> = ({
+function LocalBusinessJsonLd({
+  type = 'LocalBusiness',
   keyOverride,
-  type,
-  id,
-  name,
-  description,
-  url,
-  telephone,
   address,
   geo,
-  images,
   rating,
-  priceRange,
-  servesCuisine,
-  sameAs,
+  review,
+  action,
+  areaServed,
+  makesOffer,
   openingHours,
-}) => {
-  const jslonld = `{
-    "@context": "https://schema.org",
-    "@type": "${type}",
-    ${id ? `"@id": "${id}",` : ''}
-    ${description ? `"description": "${description}",` : ''}
-    ${url ? `"url": "${url}",` : ''}
-    ${telephone ? `"telephone": "${telephone}",` : ''}
-    ${buildAddress(address)}
-    ${geo ? `${buildGeo(geo)}` : ''}
-    ${rating ? `${buildRating(rating)}` : ''}
-    ${priceRange ? `"priceRange": "${priceRange}",` : ''}
-    ${servesCuisine ? `"servesCuisine":${formatIfArray(servesCuisine)},` : ''}
-    ${images ? `"image":${formatIfArray(images)},` : ''}
-    ${sameAs ? `"sameAs": [${sameAs.map(url => `"${url}"`)}],` : ''}
-    ${
-      openingHours
-        ? `"openingHoursSpecification": ${
-            Array.isArray(openingHours)
-              ? `[${openingHours.map(hours => `${buildOpeningHours(hours)}`)}]`
-              : buildOpeningHours(openingHours)
-          },`
-        : ''
-    }
-    "name": "${name}"
-  }`;
+  images,
+  ...rest
+}: LocalBusinessJsonLdProps) {
+  const data = {
+    ...rest,
+    image: images,
+    address: setAddress(address),
+    geo: setGeo(geo),
+    aggregateRating: setAggregateRating(rating),
+    review: setReviews(review),
+    potentialAction: setAction(action),
+    areaServed: areaServed && areaServed.map(setGeoCircle),
+    makesOffer: makesOffer?.map(setOffer),
+    openingHoursSpecification: Array.isArray(openingHours)
+      ? openingHours.map(setOpeningHours)
+      : setOpeningHours(openingHours),
+  };
 
   return (
-    <Head>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={markup(jslonld)}
-        key={`jsonld-local-business${keyOverride ? `-${keyOverride}` : ''}`}
-      />
-    </Head>
+    <JsonLd
+      type={type}
+      keyOverride={keyOverride}
+      {...data}
+      scriptKey="LocalBusiness"
+    />
   );
-};
+}
 
 export default LocalBusinessJsonLd;

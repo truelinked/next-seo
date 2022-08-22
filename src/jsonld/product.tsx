@@ -1,44 +1,21 @@
-import React, { FC } from 'react';
-import Head from 'next/head';
+import React from 'react';
 
-import markup from '../utils/markup';
-import formatIfArray from '../utils/formatIfArray';
-import { AggregateOffer, Offers } from '../types';
-import { buildOffers } from '../utils/buildOffers';
-import { buildAggregateOffer } from '../utils/buildAggregateOffer';
+import { JsonLd, JsonLdProps } from './jsonld';
+import type {
+  Review,
+  AggregateRating,
+  AggregateOffer,
+  Offers,
+} from 'src/types';
 
-export type ReviewRating = {
-  bestRating?: string;
-  ratingValue: string;
-  worstRating?: string;
-};
+import { setOffers } from 'src/utils/schema/setOffers';
+import { setReviews } from 'src/utils/schema/setReviews';
+import { setAggregateRating } from 'src/utils/schema/setAggregateRating';
+import { setAggregateOffer } from 'src/utils/schema/setAggregateOffer';
+import { setManufacturer } from 'src/utils/schema/setManufacturer';
+import { setBrand } from 'src/utils/schema/setBrand';
 
-export type Author = {
-  type: string;
-  name: string;
-};
-
-export type Publisher = {
-  type: string;
-  name: string;
-};
-
-export type Review = {
-  author: Author;
-  datePublished?: string;
-  reviewBody?: string;
-  name?: string;
-  publisher?: Publisher;
-  reviewRating: ReviewRating;
-};
-
-export type AggregateRating = {
-  ratingValue: string;
-  reviewCount: string;
-};
-
-export interface ProductJsonLdProps {
-  keyOverride?: string;
+export interface ProductJsonLdProps extends JsonLdProps {
   productName: string;
   images?: string[];
   description?: string;
@@ -52,120 +29,50 @@ export interface ProductJsonLdProps {
   gtin13?: string;
   gtin14?: string;
   mpn?: string;
+  color?: string;
+  manufacturerName?: string;
+  manufacturerLogo?: string;
+  material?: string;
+  slogan?: string;
+  disambiguatingDescription?: string;
+  productionDate?: string;
+  purchaseDate?: string;
+  releaseDate?: string;
+  award?: string;
 }
 
-const buildBrand = (brand: string) => `
-  "brand": {
-      "@type": "Thing",
-      "name": "${brand}"
-    },
-`;
-
-export const buildReviewRating = (rating: ReviewRating) =>
-  rating
-    ? `"reviewRating": {
-          "@type": "Rating",
-          ${rating.bestRating ? `"bestRating": "${rating.bestRating}",` : ''}
-          ${rating.worstRating ? `"worstRating": "${rating.worstRating}",` : ''}
-          "ratingValue": "${rating.ratingValue}"
-        }`
-    : '';
-
-export const buildAuthor = (author: Author) => `
-  "author": {
-      "@type": "${author.type}",
-      "name": "${author.name}"
-  },
-`;
-
-export const buildPublisher = (publisher: Publisher) => `
-  "publisher": {
-      "@type": "${publisher.type}",
-      "name": "${publisher.name}"
-  },
-`;
-
-export const buildReviews = (reviews: Review[]) => `
-"review": [
-  ${reviews.map(
-    review => `{
-      "@type": "Review",
-      ${review.author ? buildAuthor(review.author) : ''}
-      ${review.publisher ? buildPublisher(review.publisher) : ''}
-      ${
-        review.datePublished
-          ? `"datePublished": "${review.datePublished}",`
-          : ''
-      }
-      ${review.reviewBody ? `"reviewBody": "${review.reviewBody}",` : ''}
-      ${review.name ? `"name": "${review.name}",` : ''}
-      ${buildReviewRating(review.reviewRating)}
-  }`,
-  )}],`;
-
-export const buildAggregateRating = (aggregateRating: AggregateRating) => `
-  "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "${aggregateRating.ratingValue}",
-      "reviewCount": "${aggregateRating.reviewCount}"
-    },
-`;
-
-const ProductJsonLd: FC<ProductJsonLdProps> = ({
+function ProductJsonLd({
+  type = 'Product',
   keyOverride,
-  productName,
-  images = [],
-  description,
-  sku,
-  gtin8,
-  gtin13,
-  gtin14,
-  mpn,
+  images,
   brand,
-  reviews = [],
+  reviews,
   aggregateRating,
+  manufacturerLogo,
+  manufacturerName,
   offers,
   aggregateOffer,
-}) => {
-  const jslonld = `{
-    "@context": "https://schema.org/",
-    "@type": "Product",
-    "image":${formatIfArray(images)},
-    ${description ? `"description": "${description}",` : ''}
-    ${mpn ? `"mpn": "${mpn}",` : ''}
-    ${sku ? `"sku": "${sku}",` : ''}
-    ${gtin8 ? `"gtin8": "${gtin8}",` : ''}
-    ${gtin13 ? `"gtin13": "${gtin13}",` : ''}
-    ${gtin14 ? `"gtin14": "${gtin14}",` : ''}
-    ${brand ? buildBrand(brand) : ''}
-    ${reviews.length ? buildReviews(reviews) : ''}
-    ${aggregateRating ? buildAggregateRating(aggregateRating) : ''}
-    ${
-      offers
-        ? `"offers": ${
-            Array.isArray(offers)
-              ? `[${offers.map(offer => `${buildOffers(offer)}`)}]`
-              : buildOffers(offers)
-          },`
-        : ''
-    }
-    ${
-      aggregateOffer && !offers
-        ? `"offers": ${buildAggregateOffer(aggregateOffer)},`
-        : ''
-    }
-    "name": "${productName}"
-  }`;
-
+  productName,
+  ...rest
+}: ProductJsonLdProps) {
+  const data = {
+    ...rest,
+    image: images,
+    brand: setBrand(brand),
+    review: setReviews(reviews),
+    aggregateRating: setAggregateRating(aggregateRating),
+    manufacturer: setManufacturer({ manufacturerLogo, manufacturerName }),
+    offers: offers ? setOffers(offers) : setAggregateOffer(aggregateOffer),
+    name: productName,
+  };
   return (
-    <Head>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={markup(jslonld)}
-        key={`jsonld-product${keyOverride ? `-${keyOverride}` : ''}`}
-      />
-    </Head>
+    <JsonLd
+      type={type}
+      keyOverride={keyOverride}
+      {...data}
+      scriptKey="Product"
+    />
   );
-};
+}
 
 export default ProductJsonLd;

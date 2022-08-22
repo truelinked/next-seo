@@ -26,6 +26,38 @@ const SEO: BuildTagsParams = {
       href: 'https://www.canonical.ie/sk',
     },
   ],
+  additionalLinkTags: [
+    {
+      rel: 'icon',
+      href: 'https://www.test.ie/favicon.ico',
+    },
+    {
+      rel: 'apple-touch-icon',
+      href: 'https://www.test.ie/touch-icon-ipad.jpg',
+      sizes: '76x76',
+    },
+    {
+      rel: 'apple-touch-icon',
+      href: 'https://www.test.ie/touch-icon-iphone-retina.jpg',
+      sizes: '120x120',
+    },
+    {
+      rel: 'mask-icon',
+      href: 'https://www.test.ie/safari-pinned-tab.svg',
+      color: '#193860',
+    },
+    {
+      rel: 'manifest',
+      href: '/manifest.json',
+    },
+    {
+      rel: 'preload',
+      href: 'https://www.test.ie/font/sample-font.woof2',
+      as: 'font',
+      type: 'font/woff2',
+      crossOrigin: 'anonymous',
+    },
+  ],
   openGraph: {
     type: 'website',
     locale: 'en_IE',
@@ -38,6 +70,8 @@ const SEO: BuildTagsParams = {
         width: 800,
         height: 600,
         alt: 'Alt text right here',
+        type: 'image/jpeg',
+        secureUrl: 'https://www.test.ie/secure-image-01.jpg',
       },
       { url: 'https://www.test.ie/image-02.jpg' },
       { url: 'https://www.test.ie/image-03.jpg' },
@@ -143,6 +177,12 @@ it('returns full array for default seo object', () => {
   const ogSetImageAlt = container.querySelectorAll(
     `meta[content="${SEO.openGraph.images[0].alt}"]`,
   );
+  const ogSetImageType = container.querySelectorAll(
+    `meta[content="${SEO.openGraph.images[0].type}"]`,
+  );
+  const ogSetImageSecureUrl = container.querySelectorAll(
+    `meta[content="${SEO.openGraph.images[0].secureUrl}"]`,
+  );
   const ogLocale = container.querySelectorAll(
     `meta[content="${SEO.openGraph.locale}"]`,
   );
@@ -187,7 +227,7 @@ it('returns full array for default seo object', () => {
   });
 
   expect(title).toBeDefined();
-  expect(Array.from(index).length).toBe(2);
+  expect(Array.from(index).length).toBe(1);
   expect(Array.from(description).length).toBe(1);
   expect(Array.from(descriptionTag).length).toBe(1);
   expect(Array.from(facebookAppId).length).toBe(1);
@@ -217,6 +257,8 @@ it('returns full array for default seo object', () => {
   expect(Array.from(ogSetImageHeight).length).toBe(1);
   expect(Array.from(ogSetImageWidth).length).toBe(1);
   expect(Array.from(ogSetImageAlt).length).toBe(1);
+  expect(Array.from(ogSetImageType).length).toBe(1);
+  expect(Array.from(ogSetImageSecureUrl).length).toBe(1);
   expect(Array.from(ogLocale).length).toBe(1);
   expect(Array.from(ogLocaleTag).length).toBe(1);
   expect(Array.from(ogSiteName).length).toBe(1);
@@ -236,7 +278,7 @@ it('correctly sets noindex', () => {
   const noindex = container.querySelectorAll('meta[content="noindex,follow"]');
 
   expect(Array.from(index).length).toBe(0);
-  expect(Array.from(noindex).length).toBe(2);
+  expect(Array.from(noindex).length).toBe(1);
 });
 
 it('correctly sets nofollow', () => {
@@ -252,9 +294,8 @@ it('correctly sets nofollow', () => {
   const indexnofollow = container.querySelectorAll(
     'meta[content="index,nofollow"]',
   );
-
   expect(Array.from(indexfollow).length).toBe(0);
-  expect(Array.from(indexnofollow).length).toBe(2);
+  expect(Array.from(indexnofollow).length).toBe(1);
 });
 
 it('correctly sets noindex, nofollow', () => {
@@ -273,7 +314,7 @@ it('correctly sets noindex, nofollow', () => {
   );
 
   expect(Array.from(indexfollow).length).toBe(0);
-  expect(Array.from(noindexnofollow).length).toBe(2);
+  expect(Array.from(noindexnofollow).length).toBe(1);
 });
 
 it('displays title with titleTemplate integrated', () => {
@@ -303,9 +344,14 @@ it('displays defaultTitle when no title is provided', () => {
   const title = getByText(
     container,
     (content, element) =>
-      element.tagName.toLowerCase() === 'title' && content.startsWith(defaultTitle),
+      element.tagName.toLowerCase() === 'title' &&
+      content.startsWith(defaultTitle),
   );
+  const ogTitle = container.querySelectorAll(`meta[content="${defaultTitle}"]`);
+  const ogTitleTag = container.querySelectorAll('meta[property="og:title"]');
   expect(title.innerHTML).toMatch(defaultTitle);
+  expect(Array.from(ogTitle).length).toBe(1);
+  expect(Array.from(ogTitleTag).length).toBe(1);
 });
 
 const ArticleSEO = {
@@ -813,7 +859,7 @@ it('correctly sets noindex default', () => {
   );
 
   expect(Array.from(indexfollow).length).toBe(0);
-  expect(Array.from(noindexfollow).length).toBe(2);
+  expect(Array.from(noindexfollow).length).toBe(1);
 });
 
 it('correctly sets nofollow default', () => {
@@ -831,7 +877,7 @@ it('correctly sets nofollow default', () => {
   );
 
   expect(Array.from(indexfollow).length).toBe(0);
-  expect(Array.from(noindexnofollow).length).toBe(2);
+  expect(Array.from(noindexnofollow).length).toBe(1);
 });
 
 it('correctly read noindex & nofollow false', () => {
@@ -850,7 +896,7 @@ it('correctly read noindex & nofollow false', () => {
   );
 
   expect(Array.from(indexfollow).length).toBe(0);
-  expect(Array.from(noindexnofollow).length).toBe(2);
+  expect(Array.from(noindexnofollow).length).toBe(1);
 });
 
 it('correctly read all robots props', () => {
@@ -878,5 +924,5 @@ it('correctly read all robots props', () => {
     'meta[content="noindex,nofollow,nosnippet,max-snippet:-1,max-image-preview:none,noarchive,noimageindex,max-video-preview:-1,notranslate"]',
   );
   expect(Array.from(content).length).toBe(0);
-  expect(Array.from(contentOverride).length).toBe(2);
+  expect(Array.from(contentOverride).length).toBe(1);
 });

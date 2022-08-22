@@ -17,6 +17,38 @@ const APP_DEFAULT_SEO: DefaultSeoProps = {
       href: 'https://www.canonical.ie/de',
     },
   ],
+  additionalLinkTags: [
+    {
+      rel: 'icon',
+      href: 'https://www.test.ie/favicon.ico',
+    },
+    {
+      rel: 'apple-touch-icon',
+      href: 'https://www.test.ie/touch-icon-ipad.jpg',
+      sizes: '76x76',
+    },
+    {
+      rel: 'apple-touch-icon',
+      href: 'https://www.test.ie/touch-icon-iphone-retina.jpg',
+      sizes: '120x120',
+    },
+    {
+      rel: 'mask-icon',
+      href: 'https://www.test.ie/safari-pinned-tab.svg',
+      color: '#193860',
+    },
+    {
+      rel: 'manifest',
+      href: '/manifest.json',
+    },
+    {
+      rel: 'preload',
+      href: 'https://www.test.ie/font/sample-font.woof2',
+      as: 'font',
+      type: 'font/woff2',
+      crossOrigin: 'anonymous',
+    },
+  ],
   openGraph: {
     type: 'website',
     locale: 'en_IE',
@@ -30,6 +62,8 @@ const APP_DEFAULT_SEO: DefaultSeoProps = {
         width: 800,
         height: 600,
         alt: 'Og Image Alt A',
+        type: 'image/jpeg',
+        secureUrl: 'https://www.test.ie/secure-og-image-a-01.jpg',
       },
     ],
     site_name: 'SiteName A',

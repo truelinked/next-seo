@@ -1,12 +1,75 @@
-import React, { FC } from 'react';
+import React from 'react';
 import Head from 'next/head';
-
-import markup from '../utils/markup';
-import formatIfArray from '../utils/formatIfArray';
 import buildAddress from '../utils/buildAddress';
-import { Address, AggregateOffer, Offers, Composer, Organizer } from '../types';
-import { buildOffers } from '../utils/buildOffers';
-import { buildAggregateOffer } from '../utils/buildAggregateOffer';
+import { JsonLd, JsonLdProps } from './jsonld';
+import type {
+  AggregateOffer,
+  Offers,
+  Organizer,
+  EventStatus,
+  EventAttendanceMode,
+} from 'src/types';
+import { setLocation } from 'src/utils/schema/setLocation';
+import { setPerformer } from 'src/utils/schema/setPerformer';
+import { setOffers } from 'src/utils/schema/setOffers';
+import { setAggregateOffer } from 'src/utils/schema/setAggregateOffer';
+import { setOrganizer } from 'src/utils/schema/setOrganizer';
+
+const markup = (jsonld: string) => ({ __html: jsonld });
+
+var formatIfArray = function formatIfArray(value) {
+  return Array.isArray(value)
+    ? '[' +
+        value.map(function (val) {
+          return '"' + val + '"';
+        }) +
+        ']'
+    : '"' + value + '"';
+};
+
+var buildOffers = function buildOffers(offers) {
+  return (
+    '\n  {\n    "@type": "Offer",\n    "priceCurrency": "' +
+    offers.priceCurrency +
+    '",\n    ' +
+    (offers.priceValidUntil
+      ? '"priceValidUntil": "' + offers.priceValidUntil + '",'
+      : '') +
+    '\n    ' +
+    (offers.itemCondition
+      ? '"itemCondition": "' + offers.itemCondition + '",'
+      : '') +
+    '\n    ' +
+    (offers.availability
+      ? '"availability": "' + offers.availability + '",'
+      : '') +
+    '\n    ' +
+    (offers.url ? '"url": "' + offers.url + '",' : '') +
+    '\n    ' +
+    (offers.seller
+      ? '\n      "seller": {\n      "@type": "Organization",\n      "name": "' +
+        offers.seller.name +
+        '"\n    },\n    '
+      : '') +
+    '\n    "price": "' +
+    offers.price +
+    '"\n  }\n'
+  );
+};
+
+var buildAggregateOffer = function buildAggregateOffer(offer) {
+  return (
+    '\n  {\n    "@type": "AggregateOffer",\n    "priceCurrency": "' +
+    offer.priceCurrency +
+    '",\n    ' +
+    (offer.highPrice ? '"highPrice": "' + offer.highPrice + '",' : '') +
+    '\n    ' +
+    (offer.offerCount ? '"offerCount": "' + offer.offerCount + '",' : '') +
+    '\n    "lowPrice": "' +
+    offer.lowPrice +
+    '"\n  }\n'
+  );
+};
 
 type Location = {
   type: string;
@@ -25,8 +88,7 @@ type Work = {
   role: string;
 };
 //Updated event for multiple instance and props
-export interface EventJsonLdProps {
-  keyOverride: string;
+export interface EventJsonLdProps extends JsonLdProps {
   name: string;
   startDate: string;
   endDate: string;
@@ -40,6 +102,7 @@ export interface EventJsonLdProps {
   offers?: Offers | Offers[];
   aggregateOffer?: AggregateOffer;
   performers?: Performer | Performer[];
+  keyOverride: string;
   composers?: Composer | Composer[];
   organizers?: Organizer | Organizer[];
   works?: Work | Work[];
@@ -98,12 +161,11 @@ const buildOrganization = (organizer: Organizer) => `
 
 const EventJsonLd: FC<EventJsonLdProps> = ({
   keyOverride,
+  type = 'Event',
   name,
   startDate,
   endDate,
   location,
-  url,
-  description,
   images,
   offers,
   aggregateOffer,
@@ -114,6 +176,8 @@ const EventJsonLd: FC<EventJsonLdProps> = ({
   composers,
   organizers,
   works,
+  url,
+  description,
 }) => {
   const jslonld = `{
     "@context": "https://schema.org",
