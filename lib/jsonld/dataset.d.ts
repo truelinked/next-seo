@@ -1,8 +1,13 @@
-import { FC } from 'react';
-export interface DatasetJsonLdProps {
+/// <reference types="react" />
+import { JsonLdProps } from './jsonld';
+export interface DatasetJsonLdProps extends JsonLdProps {
   description: string;
   name: string;
   license?: string;
 }
-declare const DatasetJsonLd: FC<DatasetJsonLdProps>;
+declare function DatasetJsonLd({
+  type,
+  keyOverride,
+  ...rest
+}: DatasetJsonLdProps): JSX.Element;
 export default DatasetJsonLd;

@@ -1,8 +1,7 @@
-import { FC } from 'react';
-import { Review } from './product';
-import { AggregateRating } from './recipe';
-export interface SoftwareAppJsonLdProps {
-  keyOverride?: string;
+/// <reference types="react" />
+import { JsonLdProps } from './jsonld';
+import type { Review, AggregateRating } from 'src/types';
+export interface SoftwareAppJsonLdProps extends JsonLdProps {
   name: string;
   price: string;
   priceCurrency: string;
@@ -11,5 +10,13 @@ export interface SoftwareAppJsonLdProps {
   review?: Review;
   aggregateRating?: AggregateRating;
 }
-declare const SoftwareAppJsonLd: FC<SoftwareAppJsonLdProps>;
+declare function SoftwareAppJsonLd({
+  type,
+  keyOverride,
+  priceCurrency,
+  price,
+  aggregateRating,
+  review,
+  ...rest
+}: SoftwareAppJsonLdProps): JSX.Element;
 export default SoftwareAppJsonLd;

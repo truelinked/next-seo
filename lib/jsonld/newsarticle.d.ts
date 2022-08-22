@@ -1,6 +1,6 @@
-import { FC } from 'react';
-export interface NewsArticleJsonLdProps {
-  keyOverride?: string;
+/// <reference types="react" />
+import { JsonLdProps } from './jsonld';
+export interface NewsArticleJsonLdProps extends JsonLdProps {
   url: string;
   title: string;
   images: ReadonlyArray<string>;
@@ -15,5 +15,20 @@ export interface NewsArticleJsonLdProps {
   publisherName: string;
   publisherLogo: string;
 }
-declare const NewsArticleJsonLd: FC<NewsArticleJsonLdProps>;
+declare function NewsArticleJsonLd({
+  type,
+  keyOverride,
+  url,
+  title,
+  images,
+  section,
+  dateCreated,
+  datePublished,
+  dateModified,
+  authorName,
+  publisherName,
+  publisherLogo,
+  body,
+  ...rest
+}: NewsArticleJsonLdProps): JSX.Element;
 export default NewsArticleJsonLd;

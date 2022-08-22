@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { Address, AggregateOffer, Offers, Composer, Organizer } from '../types';
+import { JsonLdProps } from './jsonld';
 declare type Location = {
   type: string;
   name?: string;
@@ -15,8 +16,7 @@ declare type Work = {
   name: string;
   role: string;
 };
-export interface EventJsonLdProps {
-  keyOverride: string;
+export interface EventJsonLdProps extends JsonLdProps {
   name: string;
   startDate: string;
   endDate: string;
@@ -30,6 +30,7 @@ export interface EventJsonLdProps {
   offers?: Offers | Offers[];
   aggregateOffer?: AggregateOffer;
   performers?: Performer | Performer[];
+  keyOverride: string;
   composers?: Composer | Composer[];
   organizers?: Organizer | Organizer[];
   works?: Work | Work[];

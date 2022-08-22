@@ -1,4 +1,4 @@
-/// <reference types="react" />
+import React from 'react';
 import { BuildTagsParams } from '../types';
-declare const buildTags: (config: BuildTagsParams) => JSX.Element[];
+declare const buildTags: (config: BuildTagsParams) => React.ReactNode[];
 export default buildTags;

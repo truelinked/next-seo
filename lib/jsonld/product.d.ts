@@ -1,32 +1,12 @@
-import { FC } from 'react';
-import { AggregateOffer, Offers } from '../types';
-export declare type ReviewRating = {
-  bestRating?: string;
-  ratingValue: string;
-  worstRating?: string;
-};
-export declare type Author = {
-  type: string;
-  name: string;
-};
-export declare type Publisher = {
-  type: string;
-  name: string;
-};
-export declare type Review = {
-  author: Author;
-  datePublished?: string;
-  reviewBody?: string;
-  name?: string;
-  publisher?: Publisher;
-  reviewRating: ReviewRating;
-};
-export declare type AggregateRating = {
-  ratingValue: string;
-  reviewCount: string;
-};
-export interface ProductJsonLdProps {
-  keyOverride?: string;
+/// <reference types="react" />
+import { JsonLdProps } from './jsonld';
+import type {
+  Review,
+  AggregateRating,
+  AggregateOffer,
+  Offers,
+} from 'src/types';
+export interface ProductJsonLdProps extends JsonLdProps {
   productName: string;
   images?: string[];
   description?: string;
@@ -40,13 +20,29 @@ export interface ProductJsonLdProps {
   gtin13?: string;
   gtin14?: string;
   mpn?: string;
+  color?: string;
+  manufacturerName?: string;
+  manufacturerLogo?: string;
+  material?: string;
+  slogan?: string;
+  disambiguatingDescription?: string;
+  productionDate?: string;
+  purchaseDate?: string;
+  releaseDate?: string;
+  award?: string;
 }
-export declare const buildReviewRating: (rating: ReviewRating) => string;
-export declare const buildAuthor: (author: Author) => string;
-export declare const buildPublisher: (publisher: Publisher) => string;
-export declare const buildReviews: (reviews: Review[]) => string;
-export declare const buildAggregateRating: (
-  aggregateRating: AggregateRating,
-) => string;
-declare const ProductJsonLd: FC<ProductJsonLdProps>;
+declare function ProductJsonLd({
+  type,
+  keyOverride,
+  images,
+  brand,
+  reviews,
+  aggregateRating,
+  manufacturerLogo,
+  manufacturerName,
+  offers,
+  aggregateOffer,
+  productName,
+  ...rest
+}: ProductJsonLdProps): JSX.Element;
 export default ProductJsonLd;

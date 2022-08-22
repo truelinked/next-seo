@@ -1,4 +1,5 @@
-import { FC } from 'react';
+/// <reference types="react" />
+import { JsonLdProps } from './jsonld';
 export interface HiringOrganization {
   name: string;
   sameAs: string;
@@ -26,7 +27,7 @@ export declare type EmploymentType =
   | 'VOLUNTEER'
   | 'PER_DIEM'
   | 'OTHER';
-export interface JobPostingJsonLdProps {
+export interface JobPostingJsonLdProps extends JsonLdProps {
   keyOverride?: string;
   datePosted: string;
   description: string;
@@ -39,5 +40,13 @@ export interface JobPostingJsonLdProps {
   jobLocation?: Place;
   jobLocationType?: string;
 }
-declare const JobPostingJsonLd: FC<JobPostingJsonLdProps>;
+declare function JobPostingJsonLd({
+  type,
+  keyOverride,
+  baseSalary,
+  hiringOrganization,
+  applicantLocationRequirements,
+  jobLocation,
+  ...rest
+}: JobPostingJsonLdProps): JSX.Element;
 export default JobPostingJsonLd;

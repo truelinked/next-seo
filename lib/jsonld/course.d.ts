@@ -1,10 +1,16 @@
-import { FC } from 'react';
-export interface CourseJsonLdProps {
-  keyOverride?: string;
+/// <reference types="react" />
+import type { Provider } from 'src/types';
+import { JsonLdProps } from './jsonld';
+export interface CourseJsonLdProps extends JsonLdProps {
   courseName: string;
   description: string;
-  providerName: string;
-  providerUrl?: string;
+  provider: Provider;
 }
-declare const CourseJsonLd: FC<CourseJsonLdProps>;
+declare function CourseJsonLd({
+  type,
+  keyOverride,
+  courseName,
+  provider,
+  ...rest
+}: CourseJsonLdProps): JSX.Element;
 export default CourseJsonLd;

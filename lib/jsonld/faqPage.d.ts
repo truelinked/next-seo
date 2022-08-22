@@ -1,10 +1,13 @@
-import React from 'react';
-export interface Question {
-  questionName: string;
-  acceptedAnswerText: string;
-}
-export interface FAQPageJsonLdProps {
+/// <reference types="react" />
+import type { Question } from 'src/types';
+import { JsonLdProps } from './jsonld';
+export interface FAQPageJsonLdProps extends JsonLdProps {
   mainEntity: Question[];
 }
-declare const FAQPageJsonLd: React.FC<FAQPageJsonLdProps>;
+declare function FAQPageJsonLd({
+  type,
+  keyOverride,
+  mainEntity,
+  ...rest
+}: FAQPageJsonLdProps): JSX.Element;
 export default FAQPageJsonLd;

@@ -1,12 +1,12 @@
-import { FC } from 'react';
-export interface ItemListElements {
-  item: string;
-  name: string;
-  position: number;
-}
-export interface BreadCrumbJsonLdProps {
-  keyOverride?: string;
+/// <reference types="react" />
+import type { ItemListElements } from 'src/types';
+import { JsonLdProps } from './jsonld';
+export interface BreadCrumbJsonLdProps extends JsonLdProps {
   itemListElements: ItemListElements[];
 }
-declare const BreadCrumbJsonLd: FC<BreadCrumbJsonLdProps>;
+declare function BreadCrumbJsonLd({
+  type,
+  keyOverride,
+  itemListElements,
+}: BreadCrumbJsonLdProps): JSX.Element;
 export default BreadCrumbJsonLd;

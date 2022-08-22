@@ -1,7 +1,7 @@
-import { FC } from 'react';
-import { CourseJsonLdProps } from './course';
-import { Review, AggregateRating } from './product';
-import { RecipeJsonLdProps } from './recipe';
+/// <reference types="react" />
+import { JsonLdProps } from './jsonld';
+import type { CourseJsonLdProps, RecipeJsonLdProps } from 'src/index';
+import type { Review, AggregateRating } from 'src/types';
 declare type Director = {
   name: string;
 };
@@ -9,11 +9,11 @@ interface DefaultDataProps {
   url: string;
 }
 interface ExtendedCourseJsonLdProps
-  extends CourseJsonLdProps,
-    DefaultDataProps {}
+  extends DefaultDataProps,
+    CourseJsonLdProps {}
 interface ExtendedRecipeJsonLdProps
-  extends RecipeJsonLdProps,
-    DefaultDataProps {}
+  extends DefaultDataProps,
+    RecipeJsonLdProps {}
 export interface MovieJsonLdProps {
   name: string;
   url: string;
@@ -23,13 +23,19 @@ export interface MovieJsonLdProps {
   review?: Review;
   aggregateRating?: AggregateRating;
 }
-export interface CarouselJsonLdProps {
-  type: 'default' | 'movie' | 'recipe' | 'course';
+export interface CarouselJsonLdProps extends JsonLdProps {
+  ofType: 'default' | 'movie' | 'recipe' | 'course';
   data:
+    | any
     | DefaultDataProps[]
     | MovieJsonLdProps[]
     | ExtendedCourseJsonLdProps[]
     | ExtendedRecipeJsonLdProps[];
 }
-declare const CarouselJsonLd: FC<CarouselJsonLdProps>;
+declare function CarouselJsonLd({
+  type,
+  keyOverride,
+  ofType,
+  data,
+}: CarouselJsonLdProps): JSX.Element;
 export default CarouselJsonLd;

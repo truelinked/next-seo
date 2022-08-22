@@ -1,8 +1,12 @@
-import { FC } from 'react';
-export interface LogoJsonLdProps {
-  keyOverride?: string;
+/// <reference types="react" />
+import { JsonLdProps } from './jsonld';
+export interface LogoJsonLdProps extends JsonLdProps {
   logo: string;
   url: string;
 }
-declare const LogoJsonLd: FC<LogoJsonLdProps>;
+declare function LogoJsonLd({
+  type,
+  keyOverride,
+  ...rest
+}: LogoJsonLdProps): JSX.Element;
 export default LogoJsonLd;

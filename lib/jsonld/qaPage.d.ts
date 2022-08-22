@@ -1,27 +1,13 @@
-import React from 'react';
-export interface Person {
-  name: string;
-}
-export interface Answer {
-  text: string;
-  dateCreated?: string;
-  upvotedCount?: number;
-  url?: string;
-  author?: Person;
-}
-export interface Question {
-  name: string;
-  answerCount: number;
-  acceptedAnswer?: Answer;
-  suggestedAnswer?: Answer[];
-  text?: string;
-  author?: Person;
-  upvotedCount?: number;
-  dateCreated?: string;
-}
-export interface QAPageJsonldProps {
+/// <reference types="react" />
+import type { Question } from 'src/types';
+import { JsonLdProps } from './jsonld';
+export interface QAPageJsonLdProps extends JsonLdProps {
   mainEntity: Question;
-  keyOverride?: string;
 }
-declare const QAPageJsonLd: React.FC<QAPageJsonldProps>;
+declare function QAPageJsonLd({
+  type,
+  keyOverride,
+  mainEntity,
+  ...rest
+}: QAPageJsonLdProps): JSX.Element;
 export default QAPageJsonLd;

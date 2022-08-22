@@ -1,22 +1,16 @@
-import { FC } from 'react';
-import { Address } from '../types';
-declare type Geo = {
-  latitude: string;
-  longitude: string;
-};
-declare type Rating = {
-  ratingValue: string;
-  ratingCount: string;
-};
-declare type OpeningHoursSpecification = {
-  opens: string;
-  closes: string;
-  dayOfWeek: string | string[];
-  validFrom?: string;
-  validThrough?: string;
-};
-export interface LocalBusinessJsonLdProps {
-  keyOverride?: string;
+/// <reference types="react" />
+import { JsonLdProps } from './jsonld';
+import type {
+  Address,
+  Geo,
+  AggregateRating,
+  Review,
+  Action,
+  GeoCircle,
+  OpeningHoursSpecification,
+  Offer,
+} from 'src/types';
+export interface LocalBusinessJsonLdProps extends JsonLdProps {
   type: string;
   id: string;
   name: string;
@@ -26,11 +20,28 @@ export interface LocalBusinessJsonLdProps {
   address: Address;
   geo?: Geo;
   images?: string[];
-  rating?: Rating;
+  rating?: AggregateRating;
+  review?: Review[];
   priceRange?: string;
   servesCuisine?: string | string[];
   sameAs?: string[];
   openingHours?: OpeningHoursSpecification | OpeningHoursSpecification[];
+  action?: Action;
+  areaServed?: GeoCircle[];
+  makesOffer?: Offer[];
 }
-declare const LocalBusinessJsonLd: FC<LocalBusinessJsonLdProps>;
+declare function LocalBusinessJsonLd({
+  type,
+  keyOverride,
+  address,
+  geo,
+  rating,
+  review,
+  action,
+  areaServed,
+  makesOffer,
+  openingHours,
+  images,
+  ...rest
+}: LocalBusinessJsonLdProps): JSX.Element;
 export default LocalBusinessJsonLd;

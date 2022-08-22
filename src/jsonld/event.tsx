@@ -1,23 +1,12 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Head from 'next/head';
+import { Address, AggregateOffer, Offers, Composer, Organizer } from '../types';
 import buildAddress from '../utils/buildAddress';
-import { JsonLd, JsonLdProps } from './jsonld';
-import type {
-  AggregateOffer,
-  Offers,
-  Organizer,
-  EventStatus,
-  EventAttendanceMode,
-} from 'src/types';
-import { setLocation } from 'src/utils/schema/setLocation';
-import { setPerformer } from 'src/utils/schema/setPerformer';
-import { setOffers } from 'src/utils/schema/setOffers';
-import { setAggregateOffer } from 'src/utils/schema/setAggregateOffer';
-import { setOrganizer } from 'src/utils/schema/setOrganizer';
+import { JsonLdProps } from './jsonld';
 
 const markup = (jsonld: string) => ({ __html: jsonld });
 
-var formatIfArray = function formatIfArray(value) {
+var formatIfArray = function formatIfArray(value: any) {
   return Array.isArray(value)
     ? '[' +
         value.map(function (val) {
@@ -27,7 +16,7 @@ var formatIfArray = function formatIfArray(value) {
     : '"' + value + '"';
 };
 
-var buildOffers = function buildOffers(offers) {
+var buildOffers = function buildOffers(offers: any) {
   return (
     '\n  {\n    "@type": "Offer",\n    "priceCurrency": "' +
     offers.priceCurrency +
@@ -57,7 +46,7 @@ var buildOffers = function buildOffers(offers) {
   );
 };
 
-var buildAggregateOffer = function buildAggregateOffer(offer) {
+var buildAggregateOffer = function buildAggregateOffer(offer: any) {
   return (
     '\n  {\n    "@type": "AggregateOffer",\n    "priceCurrency": "' +
     offer.priceCurrency +
@@ -161,7 +150,6 @@ const buildOrganization = (organizer: Organizer) => `
 
 const EventJsonLd: FC<EventJsonLdProps> = ({
   keyOverride,
-  type = 'Event',
   name,
   startDate,
   endDate,

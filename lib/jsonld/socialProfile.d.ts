@@ -1,10 +1,14 @@
-import { FC } from 'react';
-export interface SocialProfileJsonLdProps {
-  keyOverride?: string;
-  type: string;
+/// <reference types="react" />
+import { JsonLdProps } from './jsonld';
+export interface SocialProfileJsonLdProps extends JsonLdProps {
+  type: 'Person' | 'Organization';
   name: string;
   url: string;
   sameAs: string[];
 }
-declare const SocialProfileJsonLd: FC<SocialProfileJsonLdProps>;
+declare function SocialProfileJsonLd({
+  type,
+  keyOverride,
+  ...rest
+}: SocialProfileJsonLdProps): JSX.Element;
 export default SocialProfileJsonLd;

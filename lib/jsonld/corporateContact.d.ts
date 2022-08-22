@@ -1,16 +1,15 @@
-import { FC } from 'react';
-export interface ContactPoint {
-  contactType: string;
-  telephone: string;
-  areaServed?: string | string[];
-  availableLanguage?: string | string[];
-  contactOption?: string | string[];
-}
-export interface CorporateContactJsonLdProps {
-  keyOverride?: string;
+/// <reference types="react" />
+import { JsonLdProps } from './jsonld';
+import type { ContactPoint } from 'src/types';
+export interface CorporateContactJsonLdProps extends JsonLdProps {
   url: string;
   contactPoint: ContactPoint[];
   logo?: string;
 }
-declare const CorporateContactJsonLd: FC<CorporateContactJsonLdProps>;
+declare function CorporateContactJsonLd({
+  type,
+  keyOverride,
+  contactPoint,
+  ...rest
+}: CorporateContactJsonLdProps): JSX.Element;
 export default CorporateContactJsonLd;
