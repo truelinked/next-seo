@@ -108,28 +108,22 @@ const buildLocation = (location: Location) => `
 `;
 
 const buildPerformer = (performer: Performer) => `
-  {
-    
+  {    
     "name": "${performer.name}",
     "performer": {
       "@type": "Person",
-      "name": "${performer.name}",
+      "name": "${performer.name}"
     }
-    ${performer.role ? `,` : ``}
-    ${performer.role ? `"@type":"PerformanceRole"` : ``},
-    ${performer.role ? `"roleName": ${performer.role}` : ``}    
-
   }
 `;
 
 const buildWorksPerformed = (work: Work) => `
-  {
-    
+  {    
     "@type":"CreativeWork",
     "name": "${work.name}",
     "creator":{
        "@type":"Person",
-       "name":"${work.name}",
+       "name":"${work.name}"
     }
   }
 `;
