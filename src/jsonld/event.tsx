@@ -114,7 +114,8 @@ const buildPerformer = (performer: Performer) => `
     "performer": {
       "@type": "Person",
       "name": "${performer.name}",
-    },
+    }
+    ${performer.role ? `,` : ``}
     ${performer.role ? `"@type":"PerformanceRole"` : ``},
     ${performer.role ? `"roleName": ${performer.role}` : ``}    
 
