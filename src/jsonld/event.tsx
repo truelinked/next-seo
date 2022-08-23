@@ -138,7 +138,8 @@ const buildComposer = (composer: Composer) => `
 const buildOrganization = (organizer: Organizer) => `
   {
     "@type": "Organization",
-    "name": "${organizer.name}",
+    "name": "${organizer.name}"
+    ${organizer.url ? `,` : ``}
     ${organizer.url ? `"url": "${encodeURI(organizer.url)}"` : ``}
   }
 `;
@@ -223,7 +224,7 @@ const EventJsonLd: FC<EventJsonLdProps> = ({
     }
     ${
       performers
-        ? `"performers": ${
+        ? `"performer": ${
             Array.isArray(performers)
               ? `[${performers.map(
                   performer => `${buildPerformer(performer)}`,
