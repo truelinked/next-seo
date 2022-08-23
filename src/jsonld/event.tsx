@@ -223,7 +223,7 @@ const EventJsonLd: FC<EventJsonLdProps> = ({
     }
     ${
       performers
-        ? `"performer": ${
+        ? `"performers": ${
             Array.isArray(performers)
               ? `[${performers.map(
                   performer => `${buildPerformer(performer)}`,
