@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import Head from 'next/head';
-import { Address, AggregateOffer, Offers, Composer, Organizer } from '../types';
+import { Address, AggregateOffer, Offers, Composer, Performer, Organizer } from '../types';
 import buildAddress from '../utils/buildAddress';
 import { JsonLdProps } from './jsonld';
 
@@ -68,10 +68,6 @@ type Location = {
   url?: string;
 };
 
-type Performer = {
-  name: string;
-  role: string;
-};
 type Work = {
   name: string;
   role: string;
@@ -108,12 +104,9 @@ const buildLocation = (location: Location) => `
 `;
 
 const buildPerformer = (performer: Performer) => `
-  {    
-    "name": "${performer.name}",
-    "performer": {
-      "@type": "Person",
-      "name": "${performer.name}"
-    }
+  {
+    "@type": "${performer.type ? performer.type : 'Person'}",
+    "name": "${performer.name}"
   }
 `;
 
@@ -130,7 +123,7 @@ const buildWorksPerformed = (work: Work) => `
 
 const buildComposer = (composer: Composer) => `
   {
-    "@type": "Person",
+    "@type": "${composer.type ? composer.type : 'Person'}",
     "name": "${composer.name}"
   }
 `;
