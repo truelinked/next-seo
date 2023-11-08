@@ -14,3 +14,16 @@ export function setItemListElements(items: ItemListElements[]) {
 
   return undefined;
 }
+
+export function setItemListBreadCrumbsElements(items: ItemListElements[]) {
+  if (items && items.length) {
+    return items.map(item => ({
+      '@type': 'ListItem',
+      position: item.position,
+      item: item.item,
+      name: item.name,
+    }));
+  }
+
+  return undefined;
+}

@@ -9,3 +9,13 @@ export declare function setItemListElements(items: ItemListElements[]):
       };
     }[]
   | undefined;
+export declare function setItemListBreadCrumbsElements(
+  items: ItemListElements[],
+):
+  | {
+      '@type': string;
+      position: number;
+      item: string;
+      name: string;
+    }[]
+  | undefined;

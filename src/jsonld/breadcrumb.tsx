@@ -1,7 +1,7 @@
 import React from 'react';
 
 import type { ItemListElements } from 'src/types';
-import { setItemListElements } from 'src/utils/schema/setItemListElements';
+import { setItemListBreadCrumbsElements } from 'src/utils/schema/setItemListElements';
 
 import { JsonLd, JsonLdProps } from './jsonld';
 
@@ -15,7 +15,7 @@ function BreadCrumbJsonLd({
   itemListElements,
 }: BreadCrumbJsonLdProps) {
   const data = {
-    itemListElement: setItemListElements(itemListElements),
+    itemListElement: setItemListBreadCrumbsElements(itemListElements),
   };
 
   return (
