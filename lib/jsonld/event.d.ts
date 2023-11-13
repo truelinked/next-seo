@@ -1,5 +1,12 @@
 import { FC } from 'react';
-import { Address, AggregateOffer, Offers, Composer, Organizer } from '../types';
+import {
+  Address,
+  AggregateOffer,
+  Offers,
+  Composer,
+  Organizer,
+  Performer,
+} from '../types';
 import { JsonLdProps } from './jsonld';
 declare type Location = {
   type: string;
@@ -7,10 +14,6 @@ declare type Location = {
   address?: Address;
   sameAs?: string;
   url?: string;
-};
-declare type Performer = {
-  name: string;
-  role: string;
 };
 declare type Work = {
   name: string;
