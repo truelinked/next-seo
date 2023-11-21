@@ -114,7 +114,7 @@ const buildPerformer = (performer: Performer) => `
   {
     "@type": "${performer.type ? performer.type : 'Person'}",
     "name": "${performer.name}"
-    "sameAs": "${performer.sameAs}"
+    "sameAs": "${performer.url}"
   }
 `;
 
@@ -133,7 +133,7 @@ const buildComposer = (composer: Composer) => `
   {
     "@type": "${composer.type ? composer.type : 'Person'}",
     "name": "${composer.name}",
-    "sameAs": "${composer.sameAs}"
+    "sameAs": "${composer.url}"
   }
 `;
 

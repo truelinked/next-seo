@@ -82,7 +82,7 @@ export interface Instruction {
 export interface Performer {
   type?: 'Person' | 'PerformingGroup';
   name: string;
-  sameAs?: string;
+  url?: string;
 }
 export interface Place {
   name: string;
@@ -180,7 +180,7 @@ export interface Address {
 export interface Composer {
   type: string;
   name: string;
-  sameAs?: string;
+  url?: string;
 }
 export interface Organizer {
   type: string;
