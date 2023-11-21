@@ -71,6 +71,7 @@ export interface Instruction {
 export interface Performer {
   type?: 'Person' | 'PerformingGroup';
   name: string;
+  sameAs?: string;
 }
 export interface Place {
   name: string;
